@@ -1,0 +1,10 @@
+name: example
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
