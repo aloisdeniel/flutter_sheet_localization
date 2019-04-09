@@ -12,9 +12,8 @@ $ pub global activate flutter_csv_localization
 
 Then run the generator :
 
-
 ```dart
-$ $ pub global run flutter_csv_localization:generate -o example.g.dart example.csv
+$ pub global run flutter_csv_localization:generate -o example.g.dart example.csv
 ```
 
 ## Example
@@ -44,6 +43,11 @@ dates.weekday.friday,vendredi,friday
 dates.weekday.saturday,samedi,saturday
 dates.weekday.sunday,dimanche,sunday
 ```
+
+## Roadmap / Ideas
+
+* [ ] Multiple values per label (plural, gender, ...)
+* [ ] Native labels (plist, xml, ...)
 
 ## Why ?
 
