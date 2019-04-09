@@ -98,6 +98,7 @@ class DartBuilder {
     result.methods.add(Method((b) => b
       ..name = "of"
       ..lambda = true
+      ..static = true
       ..returns = refer(localizations.normalizedName)
       ..body = Code(
           "Localizations.of<${localizations.name}>(context, ${localizations.name}).labels")
