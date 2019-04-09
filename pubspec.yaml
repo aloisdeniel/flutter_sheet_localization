@@ -8,9 +8,9 @@ environment:
   sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
-  meta:
-  csv:
-  args:
-  recase:
-  code_builder:
-  dart_style:
+  meta: ^1.1.7
+  csv: ^4.0.3
+  args: ^1.5.1
+  recase: ^2.0.1
+  code_builder: ^3.2.0
+  dart_style: ^1.2.7
