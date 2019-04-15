@@ -13,15 +13,14 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 }
 
 class AppLocalizations {
-  AppLocalizations(Locale this.locale)
-      : this.labels = _languages[locale.languageCode];
+  AppLocalizations(this.locale) : this.labels = _languages[locale.languageCode];
 
   final Locale locale;
 
-  static final Map<String, Labels> _languages = {
-    "fr": Labels(
-      dates: Dates(
-        weekday: Weekday(
+  static final Map<String, AppLocalizations_Labels> _languages = {
+    "fr": AppLocalizations_Labels(
+      dates: AppLocalizations_Labels_Dates(
+        weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "lundi",
           tuesday: "mardi",
           wednesday: "mercredi",
@@ -30,7 +29,7 @@ class AppLocalizations {
           saturday: "samedi",
           sunday: "dimanche",
         ),
-        month: Month(
+        month: AppLocalizations_Labels_Dates_Month(
           january: "janvier",
           february: "février",
           march: "mars",
@@ -42,9 +41,9 @@ class AppLocalizations {
         ),
       ),
     ),
-    "en": Labels(
-      dates: Dates(
-        weekday: Weekday(
+    "en": AppLocalizations_Labels(
+      dates: AppLocalizations_Labels_Dates(
+        weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "monday",
           tuesday: "tuesday",
           wednesday: "wednesday",
@@ -53,7 +52,7 @@ class AppLocalizations {
           saturday: "saturday",
           sunday: "sunday",
         ),
-        month: Month(
+        month: AppLocalizations_Labels_Dates_Month(
           january: "january",
           february: "february",
           march: "march",
@@ -67,21 +66,21 @@ class AppLocalizations {
     ),
   };
 
-  final Labels labels;
+  final AppLocalizations_Labels labels;
 
-  Labels of(BuildContext context) =>
+  static AppLocalizations_Labels of(BuildContext context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations).labels;
 }
 
-class Weekday {
-  Weekday(
-      {String this.monday,
-      String this.tuesday,
-      String this.wednesday,
-      String this.thursday,
-      String this.friday,
-      String this.saturday,
-      String this.sunday});
+class AppLocalizations_Labels_Dates_Weekday {
+  AppLocalizations_Labels_Dates_Weekday(
+      {this.monday,
+      this.tuesday,
+      this.wednesday,
+      this.thursday,
+      this.friday,
+      this.saturday,
+      this.sunday});
 
   final String monday;
 
@@ -98,16 +97,16 @@ class Weekday {
   final String sunday;
 }
 
-class Month {
-  Month(
-      {String this.january,
-      String this.february,
-      String this.march,
-      String this.april,
-      String this.may,
-      String this.june,
-      String this.july,
-      String this.august});
+class AppLocalizations_Labels_Dates_Month {
+  AppLocalizations_Labels_Dates_Month(
+      {this.january,
+      this.february,
+      this.march,
+      this.april,
+      this.may,
+      this.june,
+      this.july,
+      this.august});
 
   final String january;
 
@@ -126,16 +125,16 @@ class Month {
   final String august;
 }
 
-class Dates {
-  Dates({Weekday this.weekday, Month this.month});
+class AppLocalizations_Labels_Dates {
+  AppLocalizations_Labels_Dates({this.weekday, this.month});
 
-  final Weekday weekday;
+  final AppLocalizations_Labels_Dates_Weekday weekday;
 
-  final Month month;
+  final AppLocalizations_Labels_Dates_Month month;
 }
 
-class Labels {
-  Labels({Dates this.dates});
+class AppLocalizations_Labels {
+  AppLocalizations_Labels({this.dates});
 
-  final Dates dates;
+  final AppLocalizations_Labels_Dates dates;
 }

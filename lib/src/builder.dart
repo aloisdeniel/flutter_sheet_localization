@@ -77,8 +77,7 @@ class DartBuilder {
 
     constructor.requiredParameters.add(Parameter((p) => p
       ..name = "locale"
-      ..toThis = true
-      ..type = refer("Locale")));
+      ..toThis = true));
 
     constructor.initializers
         .add(Code("this.labels = _languages[locale.languageCode]"));
@@ -170,8 +169,7 @@ class DartBuilder {
       constructor.optionalParameters.add(Parameter((p) => p
         ..name = name
         ..named = true
-        ..toThis = true
-        ..type = refer(type)));
+        ..toThis = true));
     };
 
     section.labels.forEach((label) => addField("String", label.normalizedKey));

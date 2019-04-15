@@ -6,22 +6,27 @@ class Localizations extends Section {
   final String name;
 
   Localizations(
-      {
-        this.name = "AppLocalizations",
-        @required this.supportedLanguageCodes,
+      {this.name = "AppLocalizations",
+      @required this.supportedLanguageCodes,
       List<Label> labels,
       List<Section> children})
-      : super(children: children, labels: labels, key: null);
-} 
+      : super(path: [name, "Labels"], children: children, labels: labels, key: null);
+}
 
 class Section {
+  final List<String> path;
   final String key;
   final List<Label> labels;
   final List<Section> children;
   String get normalizedKey => ReCase(this.key).camelCase;
-  String get normalizedName => ReCase(this.key).pascalCase;
+  String get normalizedName =>
+      this.path.map((x) => ReCase(x).pascalCase).join("_");
 
-  Section({@required String key, List<Label> labels, List<Section> children})
+  Section(
+      {@required this.path,
+      @required String key,
+      List<Label> labels,
+      List<Section> children})
       : this.key = key ?? "labels",
         this.labels = labels ?? [],
         this.children = children ?? [];
@@ -39,7 +44,11 @@ class Section {
       } else {
         final section =
             this.children.firstWhere((x) => x.key == key, orElse: () {
-          final newSection = Section(key: key);
+          final newSection = Section(
+              path: <String>[]
+                ..addAll(this.path)
+                ..add(key),
+              key: key);
           this.children.add(newSection);
           return newSection;
         });
