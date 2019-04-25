@@ -16,6 +16,12 @@ Then run the generator :
 $ pub global run flutter_csv_localization:generate -o example.g.dart example.csv
 ```
 
+You can also use a public google sheet url (where your browser url is `https://docs.google.com/spreadsheets/d/<DOCID>/edit#gid=<SHEETID>`) :
+
+```dart
+$ pub global run flutter_csv_localization:generate -g -o example.g.dart <DOCID>/<SHEETID>
+```
+
 ## Example
 
 [.csv](example/lib/example.csv) -> [.dart](example/lib/example.g.dart)
