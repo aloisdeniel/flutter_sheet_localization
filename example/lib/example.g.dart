@@ -13,16 +13,16 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 }
 
 class AppLocalizations {
-  AppLocalizations(this.locale) : this.labels = _languages[locale.languageCode];
+  AppLocalizations(this.locale) : this.labels = _languages[locale];
 
   final Locale locale;
 
-  static final Map<String, AppLocalizations_Labels> _languages = {
-    "fr": AppLocalizations_Labels(
+  static final Map<Locale, AppLocalizations_Labels> _languages = {
+    Locale.fromSubtags(languageCode: "fr"): AppLocalizations_Labels(
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "lundi",
-          tuesday: "mardi",
+          tuesday: "mardia",
           wednesday: "mercredi",
           thursday: "jeudi",
           friday: "vendredi",
@@ -34,14 +34,10 @@ class AppLocalizations {
           february: "février",
           march: "mars",
           april: "avril",
-          may: "mai",
-          june: "juin",
-          july: "juillet",
-          august: "août",
         ),
       ),
     ),
-    "en": AppLocalizations_Labels(
+    Locale.fromSubtags(languageCode: "en"): AppLocalizations_Labels(
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "monday",
@@ -57,10 +53,28 @@ class AppLocalizations {
           february: "february",
           march: "march",
           april: "april",
-          may: "may",
-          june: "june",
-          july: "july",
-          august: "august",
+        ),
+      ),
+    ),
+    Locale.fromSubtags(
+        languageCode: "zh",
+        scriptCode: "Hans",
+        countryCode: "CN"): AppLocalizations_Labels(
+      dates: AppLocalizations_Labels_Dates(
+        weekday: AppLocalizations_Labels_Dates_Weekday(
+          monday: "星期一",
+          tuesday: "星期二",
+          wednesday: "星期三",
+          thursday: "星期四",
+          friday: "星期五",
+          saturday: "星期六",
+          sunday: "星期日",
+        ),
+        month: AppLocalizations_Labels_Dates_Month(
+          january: "一月",
+          february: "二月",
+          march: "游行",
+          april: "四月",
         ),
       ),
     ),
@@ -99,14 +113,7 @@ class AppLocalizations_Labels_Dates_Weekday {
 
 class AppLocalizations_Labels_Dates_Month {
   AppLocalizations_Labels_Dates_Month(
-      {this.january,
-      this.february,
-      this.march,
-      this.april,
-      this.may,
-      this.june,
-      this.july,
-      this.august});
+      {this.january, this.february, this.march, this.april});
 
   final String january;
 
@@ -115,14 +122,6 @@ class AppLocalizations_Labels_Dates_Month {
   final String march;
 
   final String april;
-
-  final String may;
-
-  final String june;
-
-  final String july;
-
-  final String august;
 }
 
 class AppLocalizations_Labels_Dates {

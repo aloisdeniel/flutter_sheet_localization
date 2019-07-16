@@ -80,14 +80,14 @@ class DartBuilder {
       ..toThis = true));
 
     constructor.initializers
-        .add(Code("this.labels = _languages[locale.languageCode]"));
+        .add(Code("this.labels = _languages[locale]"));
 
     result.fields.add(Field((b) => b
       ..name = "_languages"
       ..static = true
       ..assignment = _createLanguageMap(localizations)
       ..modifier = FieldModifier.final$
-      ..type = refer("Map<String," + localizations.normalizedName + ">")));
+      ..type = refer("Map<Locale," + localizations.normalizedName + ">")));
 
     result.fields.add(Field((b) => b
       ..name = "labels"
@@ -117,7 +117,19 @@ class DartBuilder {
 
     for (var languageCode in localizations.supportedLanguageCodes) {
       final code = _createSectionInstance(languageCode, localizations);
-      result.write("\"" + languageCode + "\" : " + code + ",");
+
+      final splits = languageCode.split("-");
+
+      var key = "Locale.fromSubtags(languageCode: \"${splits.first}\"";
+      if(splits.length > 2) {
+        key += ", scriptCode: \"${splits[1]}\"";
+        key += ", countryCode: \"${splits[2]}\"";
+      }
+      else if(splits.length > 1) {
+        key += ", countryCode: \"${splits[1]}\"";
+      }
+      key += ")";
+      result.write(key + " : " + code + ",");
     }
 
     result.write("}");

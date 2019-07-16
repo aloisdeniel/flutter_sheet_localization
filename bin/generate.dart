@@ -14,7 +14,7 @@ void main(List<String> args) async {
   final results = parser.parse(args);
 
   final google = results["google"];
-  final input = results.rest.length > 0 ? results.rest.first : null;
+  final input = results.rest.isNotEmpty ? results.rest.first : null;
   final output = results["output"] ?? "localizations.g.dart";
   final encoding = results["encoding"] ?? "utf8";
   if (google) {

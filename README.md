@@ -10,13 +10,23 @@ Install globally the tool :
 $ pub global activate flutter_csv_localization
 ```
 
+### CSV
+
 Then run the generator :
 
 ```dart
 $ pub global run flutter_csv_localization:generate -o example.g.dart example.csv
 ```
 
-You can also use a public google sheet url (where your browser url is `https://docs.google.com/spreadsheets/d/<DOCID>/edit#gid=<SHEETID>`) :
+### Google Sheet
+
+Make sure that your sheet is shared :
+
+![share](share.png)
+
+Extract from the link the `DOCID` and `SHEETID` values : `https://docs.google.com/spreadsheets/d/<DOCID>/edit#gid=<SHEETID>`) :
+
+Run the command :
 
 ```dart
 $ pub global run flutter_csv_localization:generate -g -o example.g.dart <DOCID>/<SHEETID>
