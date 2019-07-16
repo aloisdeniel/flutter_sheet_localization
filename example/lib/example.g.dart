@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   @override
   bool isSupported(Locale locale) =>
-      AppLocalizations._languages.containsKey(locale.languageCode);
+      AppLocalizations.languages.containsKey(locale);
   @override
   Future<AppLocalizations> load(Locale locale) =>
       SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
@@ -13,11 +13,11 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 }
 
 class AppLocalizations {
-  AppLocalizations(this.locale) : this.labels = _languages[locale];
+  AppLocalizations(this.locale) : this.labels = languages[locale];
 
   final Locale locale;
 
-  static final Map<Locale, AppLocalizations_Labels> _languages = {
+  static final Map<Locale, AppLocalizations_Labels> languages = {
     Locale.fromSubtags(languageCode: "fr"): AppLocalizations_Labels(
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(

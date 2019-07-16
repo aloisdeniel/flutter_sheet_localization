@@ -1,6 +1,6 @@
 name: flutter_csv_localization
 description: Flutter localizations generator from CSV files.
-version: 0.3.0+1
+version: 0.3.1
 homepage: https://github.com/aloisdeniel/flutter_csv_localization
 author: Aloïs Deniel <alois.deniel@outlook.com>
 

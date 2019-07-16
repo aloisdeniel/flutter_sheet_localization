@@ -36,7 +36,7 @@ class DartBuilder {
       ..lambda = true
       ..annotations.add(CodeExpression(Code("override")))
       ..body = Code(
-          "${localizations.name}._languages.containsKey(locale)")
+          "${localizations.name}.languages.containsKey(locale)")
       ..requiredParameters.add(Parameter((b) => b
         ..name = "locale"
         ..type = refer("Locale")))));
@@ -80,10 +80,10 @@ class DartBuilder {
       ..toThis = true));
 
     constructor.initializers
-        .add(Code("this.labels = _languages[locale]"));
+        .add(Code("this.labels = languages[locale]"));
 
     result.fields.add(Field((b) => b
-      ..name = "_languages"
+      ..name = "languages"
       ..static = true
       ..assignment = _createLanguageMap(localizations)
       ..modifier = FieldModifier.final$
