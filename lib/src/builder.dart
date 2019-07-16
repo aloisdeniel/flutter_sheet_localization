@@ -36,7 +36,7 @@ class DartBuilder {
       ..lambda = true
       ..annotations.add(CodeExpression(Code("override")))
       ..body = Code(
-          "${localizations.name}._languages.containsKey(locale.languageCode)")
+          "${localizations.name}._languages.containsKey(locale)")
       ..requiredParameters.add(Parameter((b) => b
         ..name = "locale"
         ..type = refer("Locale")))));
