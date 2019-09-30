@@ -1,1 +1,0 @@
-dart ../../bin/generate.dart -g -o ../lib/example.g.dart 1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs/0

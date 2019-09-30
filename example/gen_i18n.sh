@@ -1,1 +1,0 @@
-dart ../bin/generate.dart -o lib/example.g.dart lib/example.csv
