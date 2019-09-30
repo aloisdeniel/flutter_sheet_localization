@@ -21,11 +21,11 @@ dev_dependencies:
 
 Create a sheet with your translations (following the bellow format, [an example sheet is available here](https://docs.google.com/spreadsheets/d/1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs/edit#gid=0)) :
 
-![example](example.png)
+![example](flutter_sheet_localization_generator/example.png)
 
 Make sure that your sheet is shared :
 
-![share](share.png)
+![share](flutter_sheet_localization_generator/share.png)
 
 Extract from the link the `DOCID` and `SHEETID` values : `https://docs.google.com/spreadsheets/d/<DOCID>/edit#gid=<SHEETID>`) :
 
