@@ -21,11 +21,11 @@ dev_dependencies:
 
 Create a sheet with your translations (following the bellow format, [an example sheet is available here](https://docs.google.com/spreadsheets/d/1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs/edit#gid=0)) :
 
-![example](example.png)
+![example](https://github.com/aloisdeniel/flutter_sheet_localization/raw/master/flutter_sheet_localization_generator/example.png)
 
 Make sure that your sheet is shared :
 
-![share](share.png)
+![share](https://github.com/aloisdeniel/flutter_sheet_localization/raw/master/flutter_sheet_localization_generator/share.png)
 
 Extract from the link the `DOCID` and `SHEETID` values : `https://docs.google.com/spreadsheets/d/<DOCID>/edit#gid=<SHEETID>`) :
 
@@ -81,6 +81,15 @@ MaterialApp(
 );
 ```
 
+#### 5. Display your labels
+
+```dart
+final labels = AppLocalizations.of(context);
+print(labels.dates.month.february);
+print(labels.templated.hello(firstName: "World"));
+print(labels.templated.contact(Gender.male, lastName: "John"));
+```
+
 ## Google Sheet format
 
 You can see [an example sheet here](https://docs.google.com/spreadsheets/d/1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs/edit#gid=0).
@@ -96,6 +105,43 @@ The file should have :
   * Column 0 : the label key (can be a hierarchy, separated by dots)
   * then each translation based on language code of the column
 
+
+### Conditionals
+
+It is pretty common to have variants of a label based on a condition (for example: Genders, Plurals, ...).
+
+Simply duplicate your entries and end them with `(<ConditionName>.<ConditionCase)`.
+
+
+Example :
+
+> | example.man(Gender.male) | homme |
+> | example.man(Plural.female) | woman | 
+
+See [example](example) for more details.
+
+#### Plurals
+
+The conditionals can be used the same way for plurals :
+
+Example :
+
+> | example.man(Plural.zero) | hommes |	man |
+> | example.man(Plural.one) | homme | man |
+> | example.man(Plural.multiple) | hommes | men |
+
+From your Dart code, you can then define a function :
+
+```dart
+Plural plural(int count) {
+  if (count == 0) return Plural.zero;
+  if (count == 1) return Plural.one;
+  return Plural.multiple;
+}
+```
+
+See [example](example) for more details.
+
 ### Dynamic labels
 
 You can insert a `{{KEY}}` template into a translation value to have dynamic labels.
@@ -109,10 +155,6 @@ values.hello, "Hello {{first_name}}!"
 /// Code
 print(labels.values.hello(firstName: "World"));
 ```
-
-## Roadmap / Ideas
-
-* [ ] Conditional values per label (plural, gender, ...)
 
 ## Why ?
 

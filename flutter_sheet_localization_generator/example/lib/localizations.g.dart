@@ -32,6 +32,19 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Bonjour ${firstName}!",
+        contact: (condition, {lastName}) {
+          if (condition == Gender.male) return "M. ${lastName}";
+          if (condition == Gender.female) return "Mme ${lastName}";
+          throw Exception();
+        },
+      ),
+      plurals: AppLocalizations_Labels_Plurals(
+        man: (condition) {
+          if (condition == Plural.zero) return "hommes";
+          if (condition == Plural.one) return "homme";
+          if (condition == Plural.multiple) return "hommes";
+          throw Exception();
+        },
       ),
     ),
     Locale.fromSubtags(languageCode: "en"): AppLocalizations_Labels(
@@ -54,6 +67,19 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Hello ${firstName}!",
+        contact: (condition, {lastName}) {
+          if (condition == Gender.male) return "Mr ${lastName}!";
+          if (condition == Gender.female) return "Mrs ${lastName}!";
+          throw Exception();
+        },
+      ),
+      plurals: AppLocalizations_Labels_Plurals(
+        man: (condition) {
+          if (condition == Plural.zero) return "man";
+          if (condition == Plural.one) return "man";
+          if (condition == Plural.multiple) return "men";
+          throw Exception();
+        },
       ),
     ),
     Locale.fromSubtags(
@@ -79,6 +105,19 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "你好${firstName}!",
+        contact: (condition, {lastName}) {
+          if (condition == Gender.male) return "先生${lastName}";
+          if (condition == Gender.female) return "夫人${lastName}";
+          throw Exception();
+        },
+      ),
+      plurals: AppLocalizations_Labels_Plurals(
+        man: (condition) {
+          if (condition == Plural.zero) return "男人";
+          if (condition == Plural.one) return "男人";
+          if (condition == Plural.multiple) return "男人";
+          throw Exception();
+        },
       ),
     ),
   };
@@ -87,6 +126,16 @@ class AppLocalizations {
 
   static AppLocalizations_Labels of(BuildContext context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations)?.labels;
+}
+
+enum Gender {
+  male,
+  female,
+}
+enum Plural {
+  zero,
+  one,
+  multiple,
 }
 
 class AppLocalizations_Labels_Dates_Weekday {
@@ -137,23 +186,50 @@ class AppLocalizations_Labels_Dates {
 
 typedef String AppLocalizations_Labels_Templated_hello(
     {@required String firstName});
+typedef String AppLocalizations_Labels_Templated_contact(Gender condition,
+    {@required String lastName});
 
 class AppLocalizations_Labels_Templated {
   const AppLocalizations_Labels_Templated(
-      {AppLocalizations_Labels_Templated_hello hello})
-      : this._hello = hello;
+      {AppLocalizations_Labels_Templated_hello hello,
+      AppLocalizations_Labels_Templated_contact contact})
+      : this._hello = hello,
+        this._contact = contact;
 
   final AppLocalizations_Labels_Templated_hello _hello;
+
+  final AppLocalizations_Labels_Templated_contact _contact;
 
   String hello({@required String firstName}) => this._hello(
         firstName: firstName,
       );
+  String contact(Gender condition, {@required String lastName}) =>
+      this._contact(
+        condition,
+        lastName: lastName,
+      );
+}
+
+typedef String AppLocalizations_Labels_Plurals_man(Plural condition);
+
+class AppLocalizations_Labels_Plurals {
+  const AppLocalizations_Labels_Plurals(
+      {AppLocalizations_Labels_Plurals_man man})
+      : this._man = man;
+
+  final AppLocalizations_Labels_Plurals_man _man;
+
+  String man(Plural condition) => this._man(
+        condition,
+      );
 }
 
 class AppLocalizations_Labels {
-  const AppLocalizations_Labels({this.dates, this.templated});
+  const AppLocalizations_Labels({this.dates, this.templated, this.plurals});
 
   final AppLocalizations_Labels_Dates dates;
 
   final AppLocalizations_Labels_Templated templated;
+
+  final AppLocalizations_Labels_Plurals plurals;
 }

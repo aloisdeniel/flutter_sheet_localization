@@ -44,6 +44,35 @@ class Section {
   String get normalizedName =>
       this.path.map((x) => ReCase(x).pascalCase).join("_");
 
+  List<Category> get categories {
+    final result = <Category>[];
+
+    for (var label in this.allLabels) {
+      final category = label.category;
+      if (category != null) {
+        final existing = result.firstWhere(
+          (x) => x.name == category.name,
+          orElse: () {
+            final newCategory = Category(category.name);
+            result.add(newCategory);
+            return newCategory;
+          },
+        );
+
+        existing.values.addAll(category.values);
+      }
+    }
+
+    return result;
+  }
+
+  List<Label> get allLabels {
+    final result = <Label>[];
+    result.addAll(this.labels);
+    result.addAll(this.children.expand((x) => x.allLabels));
+    return result;
+  }
+
   Section(
       {@required this.path,
       @required String key,
@@ -54,14 +83,42 @@ class Section {
         this.children = children ?? [];
 
   void insert(String path, List<Translation> translations) {
-    this._insert(path.trim().split("."), translations);
+    path = path.trim();
+    final startCondition = path.indexOf("(");
+    final endCondition = path.indexOf(")");
+    String condition;
+    if (startCondition >= 0 && endCondition >= 0) {
+      condition = path.substring(startCondition + 1, endCondition);
+      path = path.substring(0, startCondition);
+    } else {
+      condition = null;
+    }
+
+    this._insert(path.split("."), condition, translations);
   }
 
-  void _insert(List<String> splits, List<Translation> translations) {
+  void _insert(List<String> splits, String conditionValue,
+      List<Translation> translations) {
     if (splits.isNotEmpty) {
       final key = splits[0].trim();
       if (splits.length == 1) {
-        this.labels.add(Label(key: key, translations: translations));
+        final existing = this.labels.firstWhere(
+              (x) => x.key == key,
+              orElse: () => null,
+            );
+        final condition = Condition.parse(conditionValue);
+        final newCase = Case(
+          condition: condition,
+          translations: translations,
+        );
+        if (existing != null) {
+          existing.addCase(newCase);
+        } else {
+          this.labels.add(Label(
+                key: key,
+                cases: [newCase],
+              ));
+        }
         return;
       } else {
         final section =
@@ -74,7 +131,7 @@ class Section {
           this.children.add(newSection);
           return newSection;
         });
-        section._insert(splits.skip(1).toList(), translations);
+        section._insert(splits.skip(1).toList(), conditionValue, translations);
       }
     }
   }
@@ -83,11 +140,106 @@ class Section {
 /// Represents a label that can have multiple translations.
 class Label {
   final String key;
-  final List<Translation> translations;
-  final List<TemplatedValue> templatedValues;
   String get normalizedKey => ReCase(this.key).camelCase;
+  final List<Case> cases;
+  List<TemplatedValue> get templatedValues {
+    if (cases.isNotEmpty) {
+      final templatedValues = cases.first.templatedValues;
+      for (var i = 1; i < cases.length; i++) {
+        final current = cases[i];
+        assert(
+            const SetEquality().equals(
+                templatedValues.toSet(), current.templatedValues.toSet()),
+            "All cases should have the same template values");
+      }
+
+      return templatedValues;
+    }
+
+    return [];
+  }
+
   Label({
     @required this.key,
+    @required this.cases,
+  }) : assert(_areCasesValid(key, cases));
+
+  void addCase(Case newCase) {
+    this.cases.add(newCase);
+    _areCasesValid(key, cases);
+  }
+
+  Category get category {
+    final values = cases
+        .where((x) => x.condition is CategoryCondition)
+        .map((x) => x.condition as CategoryCondition);
+
+    if (values.isNotEmpty) {
+      return Category(values.first.category.name)
+        ..values.addAll(values.map((x) => x.value));
+    }
+
+    return null;
+  }
+
+  static bool _areCasesValid(String key, List<Case> cases) {
+    final defaultCases =
+        cases.where((x) => x.condition is DefaultCondition).length;
+
+    assert(defaultCases > 1,
+        "There is more than one default case for label with key `$key`");
+
+    final categories = cases
+        .where((x) => x.condition is CategoryCondition)
+        .map((x) => (x.condition as CategoryCondition).category)
+        .toSet();
+
+    assert(categories.length > 1,
+        "There is more than one category in conditions for label `$key`");
+
+    return true;
+  }
+}
+
+abstract class Condition {
+  const Condition();
+  factory Condition.parse(String value) {
+    if (value == null) return const DefaultCondition();
+    value = value.trim();
+    if (value.isEmpty) return const DefaultCondition();
+    final splits = value.split(".");
+    assert(splits.length == 2,
+        "Category condition should be composed of two segments `<category>.<value>`");
+    return CategoryCondition(Category(splits[0]), splits[1]);
+  }
+}
+
+class DefaultCondition extends Condition {
+  const DefaultCondition();
+}
+
+class CategoryCondition extends Condition {
+  final Category category;
+  final String value;
+  CategoryCondition(this.category, String value)
+      : this.value = ReCase(value).camelCase;
+}
+
+class Category {
+  String get normalizedKey => ReCase(this.name).pascalCase;
+  final String name;
+  final Set<String> values = <String>[].toSet();
+  Category(this.name);
+}
+
+/// Case represents a specific case for a label that respect a [condition], with
+/// a set of associated [translations].
+class Case {
+  final Condition condition;
+  final List<Translation> translations;
+  final List<TemplatedValue> templatedValues;
+  Case({
+    @required this.condition,
     @required this.translations,
   })  : assert(assertTranslationsValid(translations)),
         this.templatedValues =
@@ -112,14 +264,13 @@ class Label {
 
 /// Represents a translation of a label in a given language.
 class Translation {
+  final Case condition;
   final String languageCode;
   final String value;
   final List<TemplatedValue> templatedValues;
 
-  Translation(
-    this.languageCode,
-    this.value,
-  ) : this.templatedValues = TemplatedValue.parse(value);
+  Translation(this.languageCode, this.value, {this.condition})
+      : this.templatedValues = TemplatedValue.parse(value);
 }
 
 /// Represents a part of a [Translation] that can be replaced
