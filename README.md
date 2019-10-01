@@ -1,4 +1,4 @@
-# Flutter Google Sheet localizations generator.
+# Flutter Google Sheet localizations generator
 
 Generates a localizations delegate from an online Google Sheet file.
 
