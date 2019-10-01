@@ -115,8 +115,10 @@ Simply duplicate your entries and end them with `(<ConditionName>.<ConditionCase
 
 Example :
 
-> | example.man(Gender.male) | homme |
-> | example.man(Plural.female) | woman | 
+> | Key | fr | en |
+> | --- | --- | --- |
+> | example.man(Gender.male) | homme | man |
+> | example.man(Gender.female) | femme | woman |
 
 See [example](example) for more details.
 
@@ -126,6 +128,8 @@ The conditionals can be used the same way for plurals :
 
 Example :
 
+> | Key | fr | en |
+> | --- | --- | --- |
 > | example.man(Plural.zero) | hommes |	man |
 > | example.man(Plural.one) | homme | man |
 > | example.man(Plural.multiple) | hommes | men |
