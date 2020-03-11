@@ -38,7 +38,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
-part 'localizations.g.dart';
+part 'localization.g.dart';
 
 @SheetLocalization("DOCID", "SHEETID") // <- See 1. to get DOCID and SHEETID
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
