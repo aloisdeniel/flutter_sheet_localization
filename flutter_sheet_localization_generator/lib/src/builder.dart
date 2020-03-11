@@ -199,6 +199,23 @@ class DartBuilder {
     _library.body.add(code);
   }
 
+  String _getLabelsCase(List<Label> labels) {
+    final results = StringBuffer("switch (key) {");
+    labels.forEach((label) {
+      if (label.templatedValues.isEmpty && label.cases.length == 1 && label.cases.first.condition is DefaultCondition) {
+        results.write("case '");
+        results.write(label.normalizedKey);
+        results.write("'");
+        results.write(":");
+        results.write("return ");
+        results.write(label.normalizedKey);
+        results.write(";\n");
+    }});
+    results.write("default: return '';");
+    results.write("}");
+    return results.toString();
+  }
+
   void _addSectionDefinition(Section section) {
     final result = ClassBuilder()..name = section.normalizedName;
 
@@ -224,6 +241,20 @@ class DartBuilder {
           ..toThis = true));
       }
     };
+
+    result.methods.add(
+      Method((b) => b
+        ..name = 'getByKey'
+        ..returns = refer("String")
+        ..body = Code(_getLabelsCase(section.labels))
+        ..requiredParameters.addAll([
+          Parameter(
+            (b) => b
+              ..type = refer("String")
+              ..name = "key",
+          )
+        ])),
+    );
 
     section.labels.forEach((label) {
       if (label.templatedValues.isEmpty &&
