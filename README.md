@@ -31,7 +31,7 @@ Extract from the link the `DOCID` and `SHEETID` values : `https://docs.google.co
 
 #### 2. Declare a localization delegate
 
-Declare the following `AppLocalizationsDelegate` class with the `SheetLocalization` annotation pointing to your sheet in a `lib/localization.dart` file :
+Declare the following `AppLocalizationsDelegate` class with the `SheetLocalization` annotation pointing to your sheet in a `lib/localizations.dart` file :
 
 ```dart
 import 'package:flutter/widgets.dart';
