@@ -33,8 +33,8 @@ class AppLocalizations {
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Bonjour ${firstName}!",
         datetime: (condition, {now}) {
-          if (condition == DateFormatter.yMMMMd)
-            return "Aujourd'hui nous sommes le ${DateFormat('yMMMMd').format(now)}";
+          if (condition == DateFormatter.yMd)
+            return "Aujourd'hui nous sommes le ${DateFormat('yMd', 'fr').format(now)}";
           throw Exception();
         },
         contact: (condition, {lastName}) {
@@ -73,8 +73,8 @@ class AppLocalizations {
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Hello ${firstName}!",
         datetime: (condition, {now}) {
-          if (condition == DateFormatter.yMMMMd)
-            return "Today it's ${DateFormat('yMMMMd').format(now)}";
+          if (condition == DateFormatter.yMd)
+            return "Today it's ${DateFormat('yMd', 'en').format(now)}";
           throw Exception();
         },
         contact: (condition, {lastName}) {
@@ -116,8 +116,8 @@ class AppLocalizations {
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "你好${firstName}!",
         datetime: (condition, {now}) {
-          if (condition == DateFormatter.yMMMMd)
-            return "男人 ${DateFormat('yMMMMd').format(now)}";
+          if (condition == DateFormatter.yMd)
+            return "${DateFormat('yMd', 'zh-Hans-CN').format(now)}";
           throw Exception();
         },
         contact: (condition, {lastName}) {
@@ -144,7 +144,7 @@ class AppLocalizations {
 }
 
 enum DateFormatter {
-  yMMMMd,
+  yMd,
 }
 enum Gender {
   male,

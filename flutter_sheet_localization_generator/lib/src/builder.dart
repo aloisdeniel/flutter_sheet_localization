@@ -99,7 +99,7 @@ class DartBuilder {
           if (condition != null && templatedValue.type == 'DateTime') {
             if (condition != null) {
               value = value.replaceFirst(templatedValue.value,
-                  "\$\{DateFormat('$condition').format(${templatedValue.normalizedKey})\}");
+                  "\$\{DateFormat('$condition', '$languageCode').format(${templatedValue.normalizedKey})\}");
             } else {
               value = value.replaceFirst(templatedValue.value,
                   "\$\{${templatedValue.normalizedKey}.toIso8601String()\}");

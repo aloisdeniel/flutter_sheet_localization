@@ -89,8 +89,8 @@ class MyHomePage extends StatelessWidget {
                 Text("0 " + labels.plurals.man(plural(0))),
                 Text("1 " + labels.plurals.man(plural(1))),
                 Text("5 " + labels.plurals.man(plural(5))),
-                Text(labels.templated
-                    .datetime(DateFormatter.yMMMMd, now: DateTime.now())),
+                Text(labels.templated.datetime(DateFormatter.yMd,
+                    now: DateTime.now().add(Duration(days: 2)))),
               ],
               // Displaying templated label
             ),
