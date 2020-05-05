@@ -15,23 +15,28 @@ class AppLocalizations {
     Locale.fromSubtags(languageCode: "fr"): AppLocalizations_Labels(
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
-          monday: "lundi",
-          tuesday: "mardia",
-          wednesday: "mercredi",
-          thursday: "jeudi",
-          friday: "vendredi",
+          monday: "Lundi",
+          tuesday: "Mardi",
+          wednesday: "Mercredi",
+          thursday: "Jeudi",
+          friday: "Vendredi",
           saturday: "samedi",
           sunday: "dimanche",
         ),
         month: AppLocalizations_Labels_Dates_Month(
           january: "janvier",
           february: "février",
-          march: "mars",
+          march: "février",
           april: "avril",
         ),
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Bonjour ${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMMMMd)
+            return "Aujourd'hui nous sommes le ${DateFormat('yMMMMd').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "M. ${lastName}";
           if (condition == Gender.female) return "Mme ${lastName}";
@@ -67,6 +72,11 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Hello ${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMMMMd)
+            return "Today it's ${DateFormat('yMMMMd').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "Mr ${lastName}!";
           if (condition == Gender.female) return "Mrs ${lastName}!";
@@ -105,6 +115,11 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "你好${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMMMMd)
+            return "男人 ${DateFormat('yMMMMd').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "先生${lastName}";
           if (condition == Gender.female) return "夫人${lastName}";
@@ -128,6 +143,9 @@ class AppLocalizations {
       Localizations.of<AppLocalizations>(context, AppLocalizations)?.labels;
 }
 
+enum DateFormatter {
+  yMMMMd,
+}
 enum Gender {
   male,
   female,
@@ -186,22 +204,34 @@ class AppLocalizations_Labels_Dates {
 
 typedef String AppLocalizations_Labels_Templated_hello(
     {@required String firstName});
+typedef String AppLocalizations_Labels_Templated_datetime(
+    DateFormatter condition,
+    {@required DateTime now});
 typedef String AppLocalizations_Labels_Templated_contact(Gender condition,
     {@required String lastName});
 
 class AppLocalizations_Labels_Templated {
   const AppLocalizations_Labels_Templated(
       {AppLocalizations_Labels_Templated_hello hello,
+      AppLocalizations_Labels_Templated_datetime datetime,
       AppLocalizations_Labels_Templated_contact contact})
       : this._hello = hello,
+        this._datetime = datetime,
         this._contact = contact;
 
   final AppLocalizations_Labels_Templated_hello _hello;
+
+  final AppLocalizations_Labels_Templated_datetime _datetime;
 
   final AppLocalizations_Labels_Templated_contact _contact;
 
   String hello({@required String firstName}) => this._hello(
         firstName: firstName,
+      );
+  String datetime(DateFormatter condition, {@required DateTime now}) =>
+      this._datetime(
+        condition,
+        now: now,
       );
   String contact(Gender condition, {@required String lastName}) =>
       this._contact(

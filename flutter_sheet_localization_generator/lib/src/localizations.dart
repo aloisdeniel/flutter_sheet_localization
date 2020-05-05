@@ -286,7 +286,26 @@ class TemplatedValue {
   /// The original key.
   ///
   /// For example: `first_name` for `{{first_name}}`
-  String get key => value.substring(2, value.length - 2);
+  String get key {
+    final inner = value.substring(2, value.length - 2);
+    final keyType = inner.split(':');
+    if (keyType.isNotEmpty) {
+      return keyType.first;
+    }
+    return inner;
+  }
+
+  /// The original type in the label
+  ///
+  /// For example: `String` in `Welcome {{first_name:String}}!`
+  String get type {
+    final inner = value.substring(2, value.length - 2);
+    final keyType = inner.split(':');
+    if (keyType.length > 1) {
+      return keyType.last;
+    }
+    return 'String';
+  }
 
   final int startIndex;
 
@@ -303,7 +322,8 @@ class TemplatedValue {
     this.value,
   );
 
-  static final regExp = RegExp(r"\{\{([a-zA-Z0-9_-]+)\}\}");
+  static final regExp = RegExp(
+      r"\{\{([a-zA-Z0-9_-]+(?::(?:DateTime|String|int|double|num))?)\}\}");
 
   /// Parse the given value and extract all templated values.
   static List<TemplatedValue> parse(String value) {

@@ -92,12 +92,22 @@ class DartBuilder {
   String _createSectionInstance(String languageCode, Section section) {
     final result = StringBuffer();
 
-    final templatedString =
-        (String value, List<TemplatedValue> templatedValues) {
+    final templatedString = (String value, List<TemplatedValue> templatedValues,
+        [String condition]) {
       if (templatedValues.isNotEmpty) {
         for (var templatedValue in templatedValues) {
-          value = value.replaceFirst(
-              templatedValue.value, "\$\{${templatedValue.normalizedKey}\}");
+          if (condition != null && templatedValue.type == 'DateTime') {
+            if (condition != null) {
+              value = value.replaceFirst(templatedValue.value,
+                  "\$\{DateFormat('$condition').format(${templatedValue.normalizedKey})\}");
+            } else {
+              value = value.replaceFirst(templatedValue.value,
+                  "\$\{${templatedValue.normalizedKey}.toIso8601String()\}");
+            }
+          } else {
+            value = value.replaceFirst(
+                templatedValue.value, "\$\{${templatedValue.normalizedKey}\}");
+          }
         }
       }
       return "\"" + _excapeString(value) + "\"";
@@ -143,7 +153,6 @@ class DartBuilder {
         if (categoryConditions.isNotEmpty) {
           for (var oneCase in categoryConditions) {
             final condition = oneCase.condition as CategoryCondition;
-
             result.write(
                 "if(condition == ${condition.category.normalizedKey}.${condition.value})");
 
@@ -152,7 +161,8 @@ class DartBuilder {
                 orElse: () => Translation(languageCode, "<?" + x.key + "?>"));
 
             result.write("return " +
-                templatedString(translation.value, x.templatedValues) +
+                templatedString(
+                    translation.value, x.templatedValues, condition.value) +
                 ";");
           }
         }
@@ -248,7 +258,7 @@ class DartBuilder {
           if (functionArguments.isNotEmpty) functionArguments += ",";
           functionArguments += "{" +
               label.templatedValues
-                  .map((x) => "@required String ${x.normalizedKey}")
+                  .map((x) => "@required ${x.type} ${x.normalizedKey}")
                   .join(", ") +
               "}";
         }
@@ -290,7 +300,7 @@ class DartBuilder {
                     (b) => b
                       ..name = x.normalizedKey
                       ..named = true
-                      ..type = refer("String")
+                      ..type = refer(x.type)
                       ..annotations.add(
                         refer('required'),
                       ),
