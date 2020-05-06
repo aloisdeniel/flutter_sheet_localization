@@ -96,13 +96,43 @@ class DartBuilder {
         [String condition]) {
       if (templatedValues.isNotEmpty) {
         for (var templatedValue in templatedValues) {
-          if (condition != null && templatedValue.type == 'DateTime') {
+          if (templatedValue.type == 'DateTime') {
             if (condition != null) {
               value = value.replaceFirst(templatedValue.value,
                   "\$\{DateFormat('$condition', '$languageCode').format(${templatedValue.normalizedKey})\}");
             } else {
               value = value.replaceFirst(templatedValue.value,
                   "\$\{${templatedValue.normalizedKey}.toIso8601String()\}");
+            }
+          } else if (templatedValue.type == 'double' ||
+              templatedValue.type == 'int' ||
+              templatedValue.type == 'num') {
+            if (condition != null) {
+              if ([
+                'decimalPercentPattern',
+                'currency',
+                'simpleCurrency',
+                'compact',
+                'compactLong',
+                'compactSimpleCurrency',
+                'compactCurrency'
+              ].contains(condition)) {
+                value = value.replaceFirst(templatedValue.value,
+                    "\$\{NumberFormat.$condition(locale: '$languageCode').format(${templatedValue.normalizedKey})\}");
+              } else if ([
+                'decimalPattern',
+                'percentPattern',
+                'scientificPattern'
+              ].contains(condition)) {
+                value = value.replaceFirst(templatedValue.value,
+                    "\$\{NumberFormat.$condition('$languageCode').format(${templatedValue.normalizedKey})\}");
+              } else if (condition == 'format') {
+                value = value.replaceFirst(templatedValue.value,
+                    "\$\{NumberFormat.$condition('$languageCode').format(${templatedValue.normalizedKey})\}");
+              }
+            } else {
+              value = value.replaceFirst(templatedValue.value,
+                  "\$\{NumberFormat(null, '$languageCode').format(${templatedValue.normalizedKey})\}");
             }
           } else {
             value = value.replaceFirst(
