@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Added multiline support
+
 ## 2.0.0
 
 - Added version parameter to force generation

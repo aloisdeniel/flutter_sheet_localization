@@ -83,6 +83,7 @@ class MyHomePage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(labels.dates.month.february),
+                Text(labels.multiline),
                 Text(labels.templated.hello(firstName: 'World')),
                 Text(labels.templated.contact(Gender.male, lastName: 'John')),
                 Text(labels.templated.contact(Gender.female, lastName: 'Jane')),

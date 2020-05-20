@@ -13,6 +13,7 @@ class AppLocalizations {
 
   static final Map<Locale, AppLocalizations_Labels> languages = {
     Locale.fromSubtags(languageCode: "fr"): AppLocalizations_Labels(
+      multiline: "C'est\n\nune\n\nexemple multiligne.",
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "LUNDI",
@@ -59,6 +60,7 @@ class AppLocalizations {
       ),
     ),
     Locale.fromSubtags(languageCode: "en"): AppLocalizations_Labels(
+      multiline: "This is\n\na\n\nmultiline example.",
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "MONDAY",
@@ -108,6 +110,7 @@ class AppLocalizations {
         languageCode: "zh",
         scriptCode: "Hans",
         countryCode: "CN"): AppLocalizations_Labels(
+      multiline: "这是\n\n一个\n\n多例子。",
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "星期一",
@@ -382,7 +385,10 @@ class AppLocalizations_Labels_Plurals {
 }
 
 class AppLocalizations_Labels {
-  const AppLocalizations_Labels({this.dates, this.templated, this.plurals});
+  const AppLocalizations_Labels(
+      {this.multiline, this.dates, this.templated, this.plurals});
+
+  final String multiline;
 
   final AppLocalizations_Labels_Dates dates;
 
@@ -392,6 +398,8 @@ class AppLocalizations_Labels {
 
   String getByKey(String key) {
     switch (key) {
+      case 'multiline':
+        return multiline;
       default:
         return '';
     }

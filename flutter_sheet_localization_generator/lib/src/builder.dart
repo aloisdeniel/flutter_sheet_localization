@@ -270,7 +270,8 @@ class DartBuilder {
     return result.toString();
   }
 
-  String _excapeString(String value) => value.replaceAll('\"', '\\\"');
+  String _excapeString(String value) =>
+      value.replaceAll('\"', '\\\"').replaceAll('\n', '\\n');
 
   void _addCategoryDefinition(Category category) {
     final values = category.values.map((x) => x + ',').join();
