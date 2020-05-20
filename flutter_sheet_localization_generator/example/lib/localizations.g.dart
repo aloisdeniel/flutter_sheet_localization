@@ -13,25 +13,39 @@ class AppLocalizations {
 
   static final Map<Locale, AppLocalizations_Labels> languages = {
     Locale.fromSubtags(languageCode: "fr"): AppLocalizations_Labels(
+      amount: (condition, {amount}) {
+        if (condition == NumberFormatter.compactCurrency)
+          return "${NumberFormat.compactCurrency(locale: 'fr').format(amount)}";
+        if (condition == NumberFormatter.decimalPattern)
+          return "${NumberFormat.decimalPattern('fr').format(amount)}";
+        if (condition == NumberFormatter.currency)
+          return "${NumberFormat.currency(locale: 'fr').format(amount)}";
+        return "${NumberFormat(null, 'fr').format(amount)}";
+      },
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
-          monday: "lundi",
-          tuesday: "mardia",
-          wednesday: "mercredi",
-          thursday: "jeudi",
-          friday: "vendredi",
+          monday: "Lundi",
+          tuesday: "Mardi",
+          wednesday: "Mercredi",
+          thursday: "Jeudi",
+          friday: "Vendredi",
           saturday: "samedi",
           sunday: "dimanche",
         ),
         month: AppLocalizations_Labels_Dates_Month(
           january: "janvier",
           february: "février",
-          march: "mars",
+          march: "février",
           april: "avril",
         ),
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Bonjour ${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMd)
+            return "Aujourd'hui nous sommes le ${DateFormat('yMd', 'fr').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "M. ${lastName}";
           if (condition == Gender.female) return "Mme ${lastName}";
@@ -48,6 +62,15 @@ class AppLocalizations {
       ),
     ),
     Locale.fromSubtags(languageCode: "en"): AppLocalizations_Labels(
+      amount: (condition, {amount}) {
+        if (condition == NumberFormatter.compactCurrency)
+          return "${NumberFormat.compactCurrency(locale: 'en').format(amount)}";
+        if (condition == NumberFormatter.decimalPattern)
+          return "${NumberFormat.decimalPattern('en').format(amount)}";
+        if (condition == NumberFormatter.currency)
+          return "${NumberFormat.currency(locale: 'en').format(amount)}";
+        return "${NumberFormat(null, 'en').format(amount)}";
+      },
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "monday",
@@ -67,6 +90,11 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "Hello ${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMd)
+            return "Today it's ${DateFormat('yMd', 'en').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "Mr ${lastName}!";
           if (condition == Gender.female) return "Mrs ${lastName}!";
@@ -86,6 +114,15 @@ class AppLocalizations {
         languageCode: "zh",
         scriptCode: "Hans",
         countryCode: "CN"): AppLocalizations_Labels(
+      amount: (condition, {amount}) {
+        if (condition == NumberFormatter.compactCurrency)
+          return "${NumberFormat.compactCurrency(locale: 'zh-Hans-CN').format(amount)}";
+        if (condition == NumberFormatter.decimalPattern)
+          return "${NumberFormat.decimalPattern('zh-Hans-CN').format(amount)}";
+        if (condition == NumberFormatter.currency)
+          return "${NumberFormat.currency(locale: 'zh-Hans-CN').format(amount)}";
+        return "${NumberFormat(null, 'zh-Hans-CN').format(amount)}";
+      },
       dates: AppLocalizations_Labels_Dates(
         weekday: AppLocalizations_Labels_Dates_Weekday(
           monday: "星期一",
@@ -105,6 +142,11 @@ class AppLocalizations {
       ),
       templated: AppLocalizations_Labels_Templated(
         hello: ({firstName}) => "你好${firstName}!",
+        datetime: (condition, {now}) {
+          if (condition == DateFormatter.yMd)
+            return "${DateFormat('yMd', 'zh-Hans-CN').format(now)}";
+          throw Exception();
+        },
         contact: (condition, {lastName}) {
           if (condition == Gender.male) return "先生${lastName}";
           if (condition == Gender.female) return "夫人${lastName}";
@@ -128,6 +170,14 @@ class AppLocalizations {
       Localizations.of<AppLocalizations>(context, AppLocalizations)?.labels;
 }
 
+enum NumberFormatter {
+  compactCurrency,
+  decimalPattern,
+  currency,
+}
+enum DateFormatter {
+  yMd,
+}
 enum Gender {
   male,
   female,
@@ -137,6 +187,8 @@ enum Plural {
   one,
   multiple,
 }
+typedef String AppLocalizations_Labels_amount(NumberFormatter condition,
+    {@required double amount});
 
 class AppLocalizations_Labels_Dates_Weekday {
   const AppLocalizations_Labels_Dates_Weekday(
@@ -186,22 +238,34 @@ class AppLocalizations_Labels_Dates {
 
 typedef String AppLocalizations_Labels_Templated_hello(
     {@required String firstName});
+typedef String AppLocalizations_Labels_Templated_datetime(
+    DateFormatter condition,
+    {@required DateTime now});
 typedef String AppLocalizations_Labels_Templated_contact(Gender condition,
     {@required String lastName});
 
 class AppLocalizations_Labels_Templated {
   const AppLocalizations_Labels_Templated(
       {AppLocalizations_Labels_Templated_hello hello,
+      AppLocalizations_Labels_Templated_datetime datetime,
       AppLocalizations_Labels_Templated_contact contact})
       : this._hello = hello,
+        this._datetime = datetime,
         this._contact = contact;
 
   final AppLocalizations_Labels_Templated_hello _hello;
+
+  final AppLocalizations_Labels_Templated_datetime _datetime;
 
   final AppLocalizations_Labels_Templated_contact _contact;
 
   String hello({@required String firstName}) => this._hello(
         firstName: firstName,
+      );
+  String datetime(DateFormatter condition, {@required DateTime now}) =>
+      this._datetime(
+        condition,
+        now: now,
       );
   String contact(Gender condition, {@required String lastName}) =>
       this._contact(
@@ -225,11 +289,24 @@ class AppLocalizations_Labels_Plurals {
 }
 
 class AppLocalizations_Labels {
-  const AppLocalizations_Labels({this.dates, this.templated, this.plurals});
+  const AppLocalizations_Labels(
+      {AppLocalizations_Labels_amount amount,
+      this.dates,
+      this.templated,
+      this.plurals})
+      : this._amount = amount;
+
+  final AppLocalizations_Labels_amount _amount;
 
   final AppLocalizations_Labels_Dates dates;
 
   final AppLocalizations_Labels_Templated templated;
 
   final AppLocalizations_Labels_Plurals plurals;
+
+  String amount(NumberFormatter condition, {@required double amount}) =>
+      this._amount(
+        condition,
+        amount: amount,
+      );
 }

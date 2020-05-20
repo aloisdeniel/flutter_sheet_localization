@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 
 import 'localizations.dart';
 
@@ -88,6 +89,14 @@ class MyHomePage extends StatelessWidget {
                 Text("0 " + labels.plurals.man(plural(0))),
                 Text("1 " + labels.plurals.man(plural(1))),
                 Text("5 " + labels.plurals.man(plural(5))),
+                Text(labels.templated.datetime(DateFormatter.yMd,
+                    now: DateTime.now().add(Duration(days: 2)))),
+                Text(labels.amount(NumberFormatter.currency, amount: 1000000)),
+                Text(labels.amount(NumberFormatter.compactCurrency,
+                    amount: 1000000)),
+                Text(labels.amount(NumberFormatter.decimalPattern,
+                    amount: 1000000.101)),
+                Text(labels.amount(null, amount: 1000000)),
               ],
               // Displaying templated label
             ),
