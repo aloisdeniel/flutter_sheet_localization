@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 import 'package:intl/intl.dart';
 
-part 'localization.g.dart';
+part 'localizations.g.dart';
 
 Plural plural(int count) {
   if (count == 0) return Plural.zero;
@@ -11,7 +11,7 @@ Plural plural(int count) {
   return Plural.multiple;
 }
 
-@SheetLocalization("1jVak4IbIzj-K7D_PIQ-gjmWNGStEau62C9e8_jzAX_Y", "0")
+@SheetLocalization('1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs', '0', 10)
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 

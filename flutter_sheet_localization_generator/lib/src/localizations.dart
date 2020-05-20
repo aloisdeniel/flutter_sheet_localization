@@ -7,12 +7,12 @@ class Localizations extends Section {
   final String name;
 
   Localizations({
-    this.name = "AppLocalizations",
+    this.name = 'AppLocalizations',
     @required this.supportedLanguageCodes,
     List<Label> labels,
     List<Section> children,
   }) : super(
-            path: [name, "Labels"],
+            path: [name, 'Labels'],
             children: children,
             labels: labels,
             key: null);
@@ -40,14 +40,13 @@ class Section {
   final String key;
   final List<Label> labels;
   final List<Section> children;
-  String get normalizedKey => ReCase(this.key).camelCase;
-  String get normalizedName =>
-      this.path.map((x) => ReCase(x).pascalCase).join("_");
+  String get normalizedKey => ReCase(key).camelCase;
+  String get normalizedName => path.map((x) => ReCase(x).pascalCase).join('_');
 
   List<Category> get categories {
     final result = <Category>[];
 
-    for (var label in this.allLabels) {
+    for (var label in allLabels) {
       final category = label.category;
       if (category != null) {
         final existing = result.firstWhere(
@@ -68,8 +67,8 @@ class Section {
 
   List<Label> get allLabels {
     final result = <Label>[];
-    result.addAll(this.labels);
-    result.addAll(this.children.expand((x) => x.allLabels));
+    result.addAll(labels);
+    result.addAll(children.expand((x) => x.allLabels));
     return result;
   }
 
@@ -78,34 +77,26 @@ class Section {
       @required String key,
       List<Label> labels,
       List<Section> children})
-      : this.key = key ?? "labels",
-        this.labels = labels ?? [],
-        this.children = children ?? [];
+      : key = key ?? 'labels',
+        labels = labels ?? [],
+        children = children ?? [];
 
-  void insert(String path, List<Translation> translations) {
-    path = path.trim();
-    final startCondition = path.indexOf("(");
-    final endCondition = path.indexOf(")");
-    String condition;
-    if (startCondition >= 0 && endCondition >= 0) {
-      condition = path.substring(startCondition + 1, endCondition);
-      path = path.substring(0, startCondition);
-    } else {
-      condition = null;
-    }
-
-    this._insert(path.split("."), condition, translations);
+  void insert(String path, String condition, List<Translation> translations) {
+    _insert(path.split('.'), condition, translations);
   }
 
-  void _insert(List<String> splits, String conditionValue,
-      List<Translation> translations) {
+  void _insert(
+    List<String> splits,
+    String conditionValue,
+    List<Translation> translations,
+  ) {
     if (splits.isNotEmpty) {
       final key = splits[0].trim();
       if (splits.length == 1) {
-        final existing = this.labels.firstWhere(
-              (x) => x.key == key,
-              orElse: () => null,
-            );
+        final existing = labels.firstWhere(
+          (x) => x.key == key,
+          orElse: () => null,
+        );
         final condition = Condition.parse(conditionValue);
         final newCase = Case(
           condition: condition,
@@ -114,24 +105,31 @@ class Section {
         if (existing != null) {
           existing.addCase(newCase);
         } else {
-          this.labels.add(Label(
-                key: key,
-                cases: [newCase],
-              ));
+          labels.add(
+            Label(
+              key: key,
+              cases: [newCase],
+            ),
+          );
         }
         return;
       } else {
-        final section =
-            this.children.firstWhere((x) => x.key == key, orElse: () {
+        final section = children.firstWhere((x) => x.key == key, orElse: () {
           final newSection = Section(
-              path: <String>[]
-                ..addAll(this.path)
-                ..add(key),
-              key: key);
-          this.children.add(newSection);
+            path: <String>[
+              ...path,
+              key,
+            ],
+            key: key,
+          );
+          children.add(newSection);
           return newSection;
         });
-        section._insert(splits.skip(1).toList(), conditionValue, translations);
+        section._insert(
+          splits.skip(1).toList(),
+          conditionValue,
+          translations,
+        );
       }
     }
   }
@@ -140,7 +138,7 @@ class Section {
 /// Represents a label that can have multiple translations.
 class Label {
   final String key;
-  String get normalizedKey => ReCase(this.key).camelCase;
+  String get normalizedKey => ReCase(key).camelCase;
   final List<Case> cases;
   List<TemplatedValue> get templatedValues {
     if (cases.isNotEmpty) {
@@ -150,7 +148,7 @@ class Label {
         assert(
             const SetEquality().equals(
                 templatedValues.toSet(), current.templatedValues.toSet()),
-            "All cases should have the same template values");
+            'All cases should have the same template values');
       }
 
       return templatedValues;
@@ -165,7 +163,7 @@ class Label {
   }) : assert(_areCasesValid(key, cases));
 
   void addCase(Case newCase) {
-    this.cases.add(newCase);
+    cases.add(newCase);
     _areCasesValid(key, cases);
   }
 
@@ -187,7 +185,7 @@ class Label {
         cases.where((x) => x.condition is DefaultCondition).length;
 
     assert(defaultCases > 1,
-        "There is more than one default case for label with key `$key`");
+        'There is more than one default case for label with key `$key`');
 
     final categories = cases
         .where((x) => x.condition is CategoryCondition)
@@ -195,7 +193,7 @@ class Label {
         .toSet();
 
     assert(categories.length > 1,
-        "There is more than one category in conditions for label `$key`");
+        'There is more than one category in conditions for label `$key`');
 
     return true;
   }
@@ -207,9 +205,9 @@ abstract class Condition {
     if (value == null) return const DefaultCondition();
     value = value.trim();
     if (value.isEmpty) return const DefaultCondition();
-    final splits = value.split(".");
+    final splits = value.split('.');
     assert(splits.length == 2,
-        "Category condition should be composed of two segments `<category>.<value>`");
+        'Category condition should be composed of two segments `<category>.<value>`');
     return CategoryCondition(Category(splits[0]), splits[1]);
   }
 }
@@ -222,13 +220,13 @@ class CategoryCondition extends Condition {
   final Category category;
   final String value;
   CategoryCondition(this.category, String value)
-      : this.value = ReCase(value).camelCase;
+      : value = ReCase(value).camelCase;
 }
 
 class Category {
-  String get normalizedKey => ReCase(this.name).pascalCase;
+  String get normalizedKey => ReCase(name).pascalCase;
   final String name;
-  final Set<String> values = <String>[].toSet();
+  final Set<String> values = <String>{};
   Category(this.name);
 }
 
@@ -269,8 +267,11 @@ class Translation {
   final String value;
   final List<TemplatedValue> templatedValues;
 
-  Translation(this.languageCode, this.value, {this.condition})
-      : this.templatedValues = TemplatedValue.parse(value);
+  Translation(
+    this.languageCode,
+    this.value, {
+    this.condition,
+  }) : templatedValues = TemplatedValue.parse(value);
 }
 
 /// Represents a part of a [Translation] that can be replaced
@@ -278,34 +279,25 @@ class Translation {
 ///
 /// It follows the pattern `{{key}}`.
 class TemplatedValue {
-  /// The original template value in the label
-  ///
-  /// For example: `{{first_name}}` in `Welcome {{first_name}}!`
+  /// The template string value
   final String value;
 
   /// The original key.
   ///
   /// For example: `first_name` for `{{first_name}}`
-  String get key {
-    final inner = value.substring(2, value.length - 2);
-    final keyType = inner.split(':');
-    if (keyType.isNotEmpty) {
-      return keyType.first;
-    }
-    return inner;
-  }
+  final String key;
 
   /// The original type in the label
   ///
   /// For example: `String` in `Welcome {{first_name:String}}!`
-  String get type {
-    final inner = value.substring(2, value.length - 2);
-    final keyType = inner.split(':');
-    if (keyType.length > 1) {
-      return keyType.last;
-    }
-    return 'String';
-  }
+  final String type;
+
+  /// A formatting function for the printing the value
+  ///
+  /// For example:
+  /// * `lowercase` on `String` (default) for `{{first_name[lowercase]}}`
+  /// * `fixed2` on `double` for `{{first_name:double[fixed2]}}`
+  final String formatting;
 
   final int startIndex;
 
@@ -314,27 +306,50 @@ class TemplatedValue {
   /// The normalized key.
   ///
   /// For example: `firstName` for `{{first_name}}`
-  String get normalizedKey => ReCase(this.key).camelCase;
+  String get normalizedKey => ReCase(key).camelCase;
 
   const TemplatedValue(
     this.startIndex,
     this.endIndex,
     this.value,
+    this.key,
+    this.type,
+    this.formatting,
   );
 
+  // Ref: '\{\{([a-zA-Z0-9_-]+)(:(String|double))?(\[([^\]]+)\])?\}\}'
   static final regExp = RegExp(
-      r"\{\{([a-zA-Z0-9_-]+(?::(?:DateTime|String|int|double|num))?)\}\}");
+    r'\{\{([a-zA-Z0-9_-]+)(:(' + allTypes.join('|') + r'))?(\[([^\]]+)\])?\}\}',
+  );
+
+  static final allTypes = <String>[
+    'DateTime',
+    'String,',
+    'int',
+    'double',
+    'num',
+  ];
 
   /// Parse the given value and extract all templated values.
   static List<TemplatedValue> parse(String value) {
     final matches = TemplatedValue.regExp.allMatches(value);
     return matches
-        .map((match) => TemplatedValue(match.start, match.end,
-            match.input.substring(match.start, match.end)))
+        .map(
+          (match) => TemplatedValue(
+            match.start,
+            match.end,
+            match.input.substring(match.start, match.end),
+            match.group(1),
+            match.group(3) ?? 'String',
+            match.group(5),
+          ),
+        )
         .toList();
   }
 
-  bool operator ==(Object o) => o is TemplatedValue && o.key == this.key;
+  @override
+  bool operator ==(Object o) => o is TemplatedValue && o.key == key;
 
-  int get hashCode => this.key.hashCode;
+  @override
+  int get hashCode => key.hashCode;
 }

@@ -62,13 +62,13 @@ class MyHomePage extends StatelessWidget {
     final labels = AppLocalizations.of(context); // <- Accessing your labels
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.title),
+        title: Text(title),
       ),
       body: Column(
         children: <Widget>[
           DropdownButton<Locale>(
-            key: Key("Picker"),
-            value: this.locale,
+            key: Key('Picker'),
+            value: locale,
             items: AppLocalizations.languages.keys.map((locale) {
               return DropdownMenuItem<Locale>(
                 value: locale,
@@ -77,18 +77,24 @@ class MyHomePage extends StatelessWidget {
                 ),
               );
             }).toList(),
-            onChanged: this.onLocaleChanged,
+            onChanged: onLocaleChanged,
           ),
           Expanded(
             child: Column(
               children: <Widget>[
                 Text(labels.dates.month.february),
-                Text(labels.templated.hello(firstName: "World")),
-                Text(labels.templated.contact(Gender.male, lastName: "John")),
-                Text(labels.templated.contact(Gender.female, lastName: "Jane")),
-                Text("0 " + labels.plurals.man(plural(0))),
-                Text("1 " + labels.plurals.man(plural(1))),
-                Text("5 " + labels.plurals.man(plural(5))),
+                Text(labels.templated.hello(firstName: 'World')),
+                Text(labels.templated.contact(Gender.male, lastName: 'John')),
+                Text(labels.templated.contact(Gender.female, lastName: 'Jane')),
+                Text('0 ' + labels.plurals.man(plural(0))),
+                Text('1 ' + labels.plurals.man(plural(1))),
+                Text('5 ' + labels.plurals.man(plural(5))),
+                Text(labels.templated.numbers.simple(price: 10)),
+                Text(labels.templated.numbers.formatted(price: 10)),
+                Text(labels.templated.date.simple(date: DateTime.now())),
+                Text(labels.templated.date.pattern(date: DateTime.now())),
+
+                /*
                 Text(labels.templated.datetime(DateFormatter.yMd,
                     now: DateTime.now().add(Duration(days: 2)))),
                 Text(labels.amount(NumberFormatter.currency, amount: 1000000)),
@@ -97,6 +103,7 @@ class MyHomePage extends StatelessWidget {
                 Text(labels.amount(NumberFormatter.decimalPattern,
                     amount: 1000000.101)),
                 Text(labels.amount(null, amount: 1000000)),
+                */
               ],
               // Displaying templated label
             ),

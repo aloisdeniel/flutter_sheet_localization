@@ -25,7 +25,7 @@ class SheetLocalizationGenerator
           element: element);
     }
 
-    if (!element.name.endsWith("Delegate")) {
+    if (!element.name.endsWith('Delegate')) {
       final name = element.name;
       throw InvalidGenerationSourceError(
           'Generator for target `$name` should have a name that ends with `Delegate`.',
@@ -37,15 +37,15 @@ class SheetLocalizationGenerator
     final classElement = element as ClassElement;
 
     final localizationDelegateSupertype = classElement.allSupertypes
-        .firstWhere((x) => x.name == "LocalizationsDelegate");
+        .firstWhere((x) => x.name == 'LocalizationsDelegate');
     if (localizationDelegateSupertype != null) {
-      final docId = annotation.objectValue.getField("docId").toStringValue();
+      final docId = annotation.objectValue.getField('docId').toStringValue();
       final sheetId =
-          annotation.objectValue.getField("sheetId").toStringValue();
+          annotation.objectValue.getField('sheetId').toStringValue();
       var localizations = await _downloadGoogleSheet(docId, sheetId);
 
       localizations = localizations.copyWith(
-          name: classElement.name.replaceAll("Delegate", ""));
+          name: classElement.name.replaceAll('Delegate', ''));
 
       final builder = DartBuilder();
       return builder.build(localizations);
@@ -60,12 +60,12 @@ class SheetLocalizationGenerator
   Future<Localizations> _downloadGoogleSheet(
       String documentId, String sheetId) async {
     final url =
-        "https://docs.google.com/spreadsheets/d/$documentId/export?format=csv&id=$documentId&gid=$sheetId";
+        'https://docs.google.com/spreadsheets/d/$documentId/export?format=csv&id=$documentId&gid=$sheetId';
 
     log.info('Downloading csv from Google sheet url "$url" ...');
 
     var response =
-        await http.get(url, headers: {"accept": "text/csv;charset=UTF-8"});
+        await http.get(url, headers: {'accept': 'text/csv;charset=UTF-8'});
 
     log.fine('Google sheet csv:\n ${response.body}');
 

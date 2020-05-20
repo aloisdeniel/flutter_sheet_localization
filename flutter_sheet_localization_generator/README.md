@@ -40,7 +40,9 @@ import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
 part 'localization.g.dart';
 
-@SheetLocalization("DOCID", "SHEETID") // <- See 1. to get DOCID and SHEETID
+@SheetLocalization("DOCID", "SHEETID", 1) // <- See 1. to get DOCID and SHEETID
+// the `1` is the generated version. You must increment it each time you want to regenerate
+// a new version of the labels.
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
@@ -89,6 +91,14 @@ print(labels.dates.month.february);
 print(labels.templated.hello(firstName: "World"));
 print(labels.templated.contact(Gender.male, lastName: "John"));
 ```
+
+## Regeneration
+
+Because of the caching system of the build_runner, it can't detect if there is a change on the distant sheet and it can't know if a new generation is needed.
+
+The `version` parameter of the `@SheetLocalization` annotation solves this issue.
+
+Each time you want to trigger a new generation, simply increment that version number and call the build runner again.
 
 ## Google Sheet format
 
@@ -159,6 +169,48 @@ values.hello, "Hello {{first_name}}!"
 /// Code
 print(labels.values.hello(firstName: "World"));
 ```
+
+#### Typed parameters
+
+You can also add one of the compatible types (`int`, `double`, `num`, `DateTime`) to the parameter by suffixing its key with `:<type>`.
+
+```
+/// Sheet
+values.price, "The price is {{price:double}}\$"
+
+/// Code
+print(labels.values.price(price: 10.5));
+```
+
+#### Formatted parameters
+
+You can indicate how the templated value must be formatted by ending the value with a formatting rule in brackets `[<rule-key>]`. This can be particulary useful for typed parameters.
+
+The available formatting rules depend on the type and generally rely on the `intl` package.
+
+> | Type | rule-key| Generated code |
+> | --- | --- | --- |
+> | `double`, `int`, `num` | `decimalPercentPattern`, `currency`, `simpleCurrency`, `compact`, `compactLong`, `compactSimpleCurrency`, `compactCurrency`, `decimalPattern`, `percentPattern`, `scientificPattern` |	`NumberFormat.<rule-key>(...)` |
+> | `DateTime` | Any date format valid pattern  |	`DateFormat('<rule-key>', ...).format(...)` |
+
+Examples:
+
+```
+/// Sheet
+values.price, "Price : {{price:double[compactCurrency]}}"
+
+/// Code
+print(labels.values.price(price: 2.00));
+```
+
+```
+/// Sheet
+values.today, "Today : {{date:DateTime[EEE, M/d/y]}}"
+
+/// Code
+print(labels.values.today(date: DateTime.now()));
+```
+
 
 ## Why ?
 

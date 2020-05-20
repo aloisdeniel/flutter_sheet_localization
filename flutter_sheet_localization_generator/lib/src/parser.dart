@@ -8,7 +8,27 @@ class CsvParser {
   final StreamTransformer<List<int>, String> decoder;
 
   CsvParser({StreamTransformer<List<int>, String> decoder})
-      : this.decoder = decoder ?? utf8.decoder;
+      : decoder = decoder ?? utf8.decoder;
+
+  static const conditionKey = 'condition';
+  static const keyKey = 'key';
+  static const reservedIndexKeys = [
+    conditionKey,
+    keyKey,
+  ];
+
+  String _uniformizeKey(String key) {
+    key = key.trim().replaceAll('\n', '');
+    final lowercase = key.toLowerCase();
+    if (reservedIndexKeys.contains(lowercase)) {
+      return lowercase;
+    }
+    return key;
+  }
+
+  bool _isReservedKey(String key) => reservedIndexKeys.contains(key);
+
+  bool _isLanguageKey(String key) => !_isReservedKey(key);
 
   Future<Localizations> parse(Stream<List<int>> input) async {
     final fields = await input
@@ -18,29 +38,52 @@ class CsvParser {
         ))
         .toList();
 
-    final index = fields[0];
+    final index = fields[0]
+        .cast<String>()
+        .map(_uniformizeKey)
+        .takeWhile((x) => x != null && x.isNotEmpty)
+        .toList();
 
+    // Getting language codes
     final result = Localizations(
-        supportedLanguageCodes: index
-            .skip(1)
-            .cast<String>()
-            .map((x) => x.trimRight().replaceAll("\n", ""))
-            .takeWhile((x) => x != null && x.isNotEmpty)
-            .toList());
+      supportedLanguageCodes: index.where(_isLanguageKey).toList(),
+    );
 
-    for (var i = 1; i < fields.length; i++) {
-      final row = fields[i];
-      if (row.length > 1) {
-        final path = row[0].toString().trim();
-        if (path.length > 0) {
-          final translations = row
-              .asMap()
-              .entries
-              .skip(1)
-              .take(result.supportedLanguageCodes.length)
-              .map((e) => Translation(index[e.key], e.value))
+    // Parsing entries
+    for (var r = 1; r < fields.length; r++) {
+      final rowValues = fields[r];
+
+      /// Creating a map
+      final row = Map<String, String>.fromEntries(
+        rowValues
+            .asMap()
+            .entries
+            .where(
+              (e) => e.key < index.length,
+            )
+            .map(
+              (e) => MapEntry(index[e.key], e.value),
+            ),
+      );
+      final key = row[keyKey];
+      var condition = row[conditionKey];
+      if (key != null && key.isNotEmpty) {
+        var path = key.trim();
+        if (path.isNotEmpty) {
+          final translations = row.entries
+              .where((e) => _isLanguageKey(e.key))
+              .map((e) => Translation(e.key, e.value))
               .toList();
-          result.insert(path, translations);
+
+          // We can also have a condition at the end of the key in parenthesis
+          final startCondition = path.indexOf('(');
+          final endCondition = path.indexOf(')');
+          if (startCondition >= 0 && endCondition >= 0) {
+            condition = path.substring(startCondition + 1, endCondition);
+            path = path.substring(0, startCondition);
+          }
+
+          result.insert(path, condition, translations);
         }
       }
     }

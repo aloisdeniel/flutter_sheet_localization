@@ -31,7 +31,7 @@ Extract from the link the `DOCID` and `SHEETID` values : `https://docs.google.co
 
 #### 2. Declare a localization delegate
 
-Declare the following `AppLocalizationsDelegate` class with the `SheetLocalization` annotation pointing to your sheet in a `lib/localizations.dart` file :
+Declare the following `AppLocalizationsDelegate` class with the `SheetLocalization` annotation pointing to your sheet in a `lib/localization.dart` file :
 
 ```dart
 import 'package:flutter/widgets.dart';
@@ -40,7 +40,9 @@ import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
 part 'localization.g.dart';
 
-@SheetLocalization("DOCID", "SHEETID") // <- See 1. to get DOCID and SHEETID
+@SheetLocalization("DOCID", "SHEETID", 1) // <- See 1. to get DOCID and SHEETID
+// the `1` is the generated version. You must increment it each time you want to regenerate
+// a new version of the labels.
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
@@ -90,6 +92,14 @@ print(labels.templated.hello(firstName: "World"));
 print(labels.templated.contact(Gender.male, lastName: "John"));
 ```
 
+## Regeneration
+
+Because of the caching system of the build_runner, it can't detect if there is a change on the distant sheet and it can't know if a new generation is needed.
+
+The `version` parameter of the `@SheetLocalization` annotation solves this issue.
+
+Each time you want to trigger a new generation, simply increment that version number and call the build runner again.
+
 ## Google Sheet format
 
 You can see [an example sheet here](https://docs.google.com/spreadsheets/d/1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs/edit#gid=0).
@@ -120,7 +130,7 @@ Example :
 > | example.man(Gender.male) | homme | man |
 > | example.man(Gender.female) | femme | woman |
 
-See [example](flutter_sheet_localization_generator/example) for more details.
+See [example](example) for more details.
 
 #### Plurals
 
@@ -144,7 +154,7 @@ Plural plural(int count) {
 }
 ```
 
-See [example](flutter_sheet_localization_generator/example) for more details.
+See [example](example) for more details.
 
 ### Dynamic labels
 
@@ -160,8 +170,48 @@ values.hello, "Hello {{first_name}}!"
 print(labels.values.hello(firstName: "World"));
 ```
 
-See [example](flutter_sheet_localization_generator/example) for more details.
+#### Typed parameters
+
+You can also add one of the compatible types (`int`, `double`, `num`, `DateTime`) to the parameter by suffixing its key with `:<type>`.
+
+```
+/// Sheet
+values.price, "The price is {{price:double}}\$"
+
+/// Code
+print(labels.values.price(price: 10.5));
+```
+
+#### Formatted parameters
+
+You can indicate how the templated value must be formatted by ending the value with a formatting rule in brackets `[<rule-key>]`. This can be particulary useful for typed parameters.
+
+The available formatting rules depend on the type and generally rely on the `intl` package.
+
+> | Type | rule-key| Generated code |
+> | --- | --- | --- |
+> | `double`, `int`, `num` | `decimalPercentPattern`, `currency`, `simpleCurrency`, `compact`, `compactLong`, `compactSimpleCurrency`, `compactCurrency`, `decimalPattern`, `percentPattern`, `scientificPattern` |	`NumberFormat.<rule-key>(...)` |
+> | `DateTime` | Any date format valid pattern  |	`DateFormat('<rule-key>', ...).format(...)` |
+
+Examples:
+
+```
+/// Sheet
+values.price, "Price : {{price:double[compactCurrency]}}"
+
+/// Code
+print(labels.values.price(price: 2.00));
+```
+
+```
+/// Sheet
+values.today, "Today : {{date:DateTime[EEE, M/d/y]}}"
+
+/// Code
+print(labels.values.today(date: DateTime.now()));
+```
+
 
 ## Why ?
 
-I find the Flutter internationalization tools not really easy to use, and I wanted a simple tool for sharing translations. Most solutions also use string based keys, and I wanted to generate pure dart code to improve performance.
+I find the Flutter internationalization tools not really easy to use, and I wanted a simple tool for sharing translations. Most solutions also use string based keys, and I wanted to generate pure dart code to improve permormance.

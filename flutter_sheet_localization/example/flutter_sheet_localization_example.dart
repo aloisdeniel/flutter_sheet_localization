@@ -1,4 +1,4 @@
 import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
-@SheetLocalization("", "")
+@SheetLocalization("", "", 1)
 class AppLabels {}
