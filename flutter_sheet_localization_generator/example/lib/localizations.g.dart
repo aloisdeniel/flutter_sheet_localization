@@ -39,6 +39,8 @@ class AppLocalizations {
           throw Exception();
         },
         numbers: AppLocalizations_Labels_Templated_Numbers(
+          count: ({count}) =>
+              "Il y a ${NumberFormat(null, 'fr').format(count)} éléments.",
           simple: ({price}) =>
               "Le prix est de ${NumberFormat(null, 'fr').format(price)}€",
           formatted: ({price}) =>
@@ -86,6 +88,8 @@ class AppLocalizations {
           throw Exception();
         },
         numbers: AppLocalizations_Labels_Templated_Numbers(
+          count: ({count}) =>
+              "There are ${NumberFormat(null, 'en').format(count)}\ items.",
           simple: ({price}) =>
               "The price is ${NumberFormat(null, 'en').format(price)}\$",
           formatted: ({price}) =>
@@ -136,6 +140,8 @@ class AppLocalizations {
           throw Exception();
         },
         numbers: AppLocalizations_Labels_Templated_Numbers(
+          count: ({count}) =>
+              "${NumberFormat(null, 'zh-Hans-CN').format(count)}個のアイテムがあります",
           simple: ({price}) =>
               "価格は${NumberFormat(null, 'zh-Hans-CN').format(price)}¥です",
           formatted: ({price}) =>
@@ -267,6 +273,8 @@ typedef String AppLocalizations_Labels_Templated_hello(
     {@required String firstName});
 typedef String AppLocalizations_Labels_Templated_contact(Gender condition,
     {@required String lastName});
+typedef String AppLocalizations_Labels_Templated_Numbers_count(
+    {@required int count});
 typedef String AppLocalizations_Labels_Templated_Numbers_simple(
     {@required double price});
 typedef String AppLocalizations_Labels_Templated_Numbers_formatted(
@@ -274,10 +282,14 @@ typedef String AppLocalizations_Labels_Templated_Numbers_formatted(
 
 class AppLocalizations_Labels_Templated_Numbers {
   const AppLocalizations_Labels_Templated_Numbers(
-      {AppLocalizations_Labels_Templated_Numbers_simple simple,
+      {AppLocalizations_Labels_Templated_Numbers_count count,
+      AppLocalizations_Labels_Templated_Numbers_simple simple,
       AppLocalizations_Labels_Templated_Numbers_formatted formatted})
-      : this._simple = simple,
+      : this._count = count,
+        this._simple = simple,
         this._formatted = formatted;
+
+  final AppLocalizations_Labels_Templated_Numbers_count _count;
 
   final AppLocalizations_Labels_Templated_Numbers_simple _simple;
 
@@ -290,6 +302,9 @@ class AppLocalizations_Labels_Templated_Numbers {
     }
   }
 
+  String count({@required int count}) => this._count(
+        count: count,
+      );
   String simple({@required double price}) => this._simple(
         price: price,
       );
