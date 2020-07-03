@@ -8,10 +8,10 @@ Add the following to your `pubspec.yaml`:
 
 ```sh
 dependencies:
-  flutter_sheet_localization: ^1.0.0
+  flutter_sheet_localization: ^2.0.0
 
 dev_dependencies:
-  flutter_sheet_localization_generator: ^1.0.0
+  flutter_sheet_localization_generator: ^2.0.0
   build_runner: ^1.3.1
 ```
 
