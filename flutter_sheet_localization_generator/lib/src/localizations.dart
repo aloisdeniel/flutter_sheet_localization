@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:recase/recase.dart';
+import 'package:recase/recase.dart' as recase;
 import 'package:collection/collection.dart';
 
 class Localizations extends Section {
@@ -40,8 +40,9 @@ class Section {
   final String key;
   final List<Label> labels;
   final List<Section> children;
-  String get normalizedKey => ReCase(key).camelCase;
-  String get normalizedName => path.map((x) => ReCase(x).pascalCase).join('_');
+  String get normalizedKey => recase.ReCase(key).camelCase;
+  String get normalizedName =>
+      path.map((x) => recase.ReCase(x).pascalCase).join('_');
 
   List<Category> get categories {
     final result = <Category>[];
@@ -138,7 +139,7 @@ class Section {
 /// Represents a label that can have multiple translations.
 class Label {
   final String key;
-  String get normalizedKey => ReCase(key).camelCase;
+  String get normalizedKey => recase.ReCase(key).camelCase;
   final List<Case> cases;
   List<TemplatedValue> get templatedValues {
     if (cases.isNotEmpty) {
@@ -220,11 +221,11 @@ class CategoryCondition extends Condition {
   final Category category;
   final String value;
   CategoryCondition(this.category, String value)
-      : value = ReCase(value).camelCase;
+      : value = recase.ReCase(value).camelCase;
 }
 
 class Category {
-  String get normalizedKey => ReCase(name).pascalCase;
+  String get normalizedKey => recase.ReCase(name).pascalCase;
   final String name;
   final Set<String> values = <String>{};
   Category(this.name);
@@ -306,7 +307,7 @@ class TemplatedValue {
   /// The normalized key.
   ///
   /// For example: `firstName` for `{{first_name}}`
-  String get normalizedKey => ReCase(key).camelCase;
+  String get normalizedKey => recase.ReCase(key).camelCase;
 
   const TemplatedValue(
     this.startIndex,
