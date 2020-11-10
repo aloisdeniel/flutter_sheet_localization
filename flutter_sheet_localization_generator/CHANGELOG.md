@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Added ignored columns when named `(<name>)`.
+- Strings are now generated with `'` instead of `"`. 
+
 ## 2.0.2
 
 - Upgraded recase dependency.

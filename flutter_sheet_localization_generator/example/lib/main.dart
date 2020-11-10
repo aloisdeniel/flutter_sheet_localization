@@ -34,10 +34,10 @@ class _MyAppState extends State<MyApp> {
           AppLocalizations.languages.keys.toList(), // <- Supported locales
       home: MyHomePage(
         title: 'Internationalization demo',
-        locale: this._currentLocale,
+        locale: _currentLocale,
         onLocaleChanged: (locale) {
-          if (this._currentLocale != locale) {
-            this.setState(() => this._currentLocale = locale);
+          if (_currentLocale != locale) {
+            setState(() => _currentLocale = locale);
           }
         },
       ),

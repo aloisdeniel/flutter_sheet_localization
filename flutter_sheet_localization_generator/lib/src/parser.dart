@@ -28,7 +28,9 @@ class CsvParser {
 
   bool _isReservedKey(String key) => reservedIndexKeys.contains(key);
 
-  bool _isLanguageKey(String key) => !_isReservedKey(key);
+  bool _isLanguageKey(String key) =>
+      !_isReservedKey(key) &&
+      !(key.trim().startsWith('(') && key.trim().endsWith(')'));
 
   Future<Localizations> parse(Stream<List<int>> input) async {
     final fields = await input
