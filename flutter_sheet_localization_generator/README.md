@@ -155,13 +155,15 @@ Example :
 > | example.man(Plural.one) | homme | man |
 > | example.man(Plural.multiple) | hommes | men |
 
-From your Dart code, you can then define a function :
+From your Dart code, you can then define an extension :
 
 ```dart
-Plural plural(int count) {
-  if (count == 0) return Plural.zero;
-  if (count == 1) return Plural.one;
-  return Plural.multiple;
+extension PluralExtension on int {
+  Plural plural() {
+    if (this == 0) return Plural.zero;
+    if (this == 1) return Plural.one;
+    return Plural.multiple;
+  }
 }
 ```
 
