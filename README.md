@@ -8,11 +8,12 @@ Add the following to your `pubspec.yaml`:
 
 ```sh
 dependencies:
-  flutter_sheet_localization: ^2.0.0
+  flutter_sheet_localization: <latest>
+  intl: <latest>
 
 dev_dependencies:
-  flutter_sheet_localization_generator: ^2.0.0
-  build_runner: ^1.3.1
+  flutter_sheet_localization_generator: <latest>
+  build_runner: ^1.10.2
 ```
 
 ### Usage
@@ -37,7 +38,6 @@ Declare the following `AppLocalizationsDelegate` class with the `SheetLocalizati
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
-import 'package:intl/intl.dart';
 
 part 'localization.g.dart';
 
@@ -116,6 +116,16 @@ The file should have :
   * Column 0 : the label key (can be a hierarchy, separated by dots)
   * then each translation based on language code of the column
 
+### Ignoring a column
+
+Sometimes you may need to add comments for translators. For this, simple add a column with a name betwen parenthesis and the column will be completely ignored by the generator.
+
+Example :
+
+> | Key | (Comments) | fr | en |
+> | --- | --- | --- | --- |
+> | example.man(Gender.male) | This is a man title on home page | homme | man |
+> | example.man(Gender.female) | This is a woman title on home page | femme | woman |
 
 ### Conditionals
 
