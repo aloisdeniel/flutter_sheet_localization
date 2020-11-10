@@ -118,7 +118,7 @@ The file should have :
 
 ### Ignoring a column
 
-Sometimes you may need to add comments for translators. For this, simple add a column with a name betwen parenthesis and the column will be completely ignored by the generator.
+Sometimes you may need to add comments for translators. For this, simply add a column with a name between parenthesis and the column will be completely ignored by the generator.
 
 Example :
 
