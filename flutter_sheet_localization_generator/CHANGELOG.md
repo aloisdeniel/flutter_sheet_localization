@@ -1,3 +1,8 @@
+## 2.1.1
+
+- Ignoring `camel_case_types` linter rule.
+- Updated typedef format.
+
 ## 2.1.0
 
 - Added ignored columns when named `(<name>)`.

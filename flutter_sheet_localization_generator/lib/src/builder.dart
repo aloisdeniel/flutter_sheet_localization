@@ -9,8 +9,7 @@ class DartBuilder {
   String build(Localizations localizations) {
     _library = LibraryBuilder();
 
-    _library.body.add(
-        Code('// ignore_for_file: prefer_generic_function_type_aliases\n\n'));
+    _library.body.add(Code('// ignore_for_file: camel_case_types\n\n'));
     _library.body.add(_createLocalization(localizations));
     localizations.categories.forEach((c) => _addCategoryDefinition(c));
     _addSectionDefinition(localizations);
@@ -370,7 +369,8 @@ class DartBuilder {
         }
 
         _library.body.add(
-          Code('typedef String $functionTypeName($functionArguments);'),
+          Code(
+              'typedef $functionTypeName = String Function($functionArguments);'),
         );
         addField(functionTypeName, '_' + label.normalizedKey);
 

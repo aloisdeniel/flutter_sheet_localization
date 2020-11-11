@@ -6,7 +6,7 @@ part of 'localizations.dart';
 // SheetLocalizationGenerator
 // **************************************************************************
 
-// ignore_for_file: prefer_generic_function_type_aliases
+// ignore_for_file: camel_case_types
 
 class AppLocalizations {
   AppLocalizations(this.locale) : labels = languages[locale];
@@ -271,15 +271,15 @@ class AppLocalizations_Labels_Dates {
   }
 }
 
-typedef String AppLocalizations_Labels_Templated_hello(
+typedef AppLocalizations_Labels_Templated_hello = String Function(
     {@required String firstName});
-typedef String AppLocalizations_Labels_Templated_contact(Gender condition,
-    {@required String lastName});
-typedef String AppLocalizations_Labels_Templated_Numbers_count(
+typedef AppLocalizations_Labels_Templated_contact = String
+    Function(Gender condition, {@required String lastName});
+typedef AppLocalizations_Labels_Templated_Numbers_count = String Function(
     {@required int count});
-typedef String AppLocalizations_Labels_Templated_Numbers_simple(
+typedef AppLocalizations_Labels_Templated_Numbers_simple = String Function(
     {@required double price});
-typedef String AppLocalizations_Labels_Templated_Numbers_formatted(
+typedef AppLocalizations_Labels_Templated_Numbers_formatted = String Function(
     {@required double price});
 
 class AppLocalizations_Labels_Templated_Numbers {
@@ -315,9 +315,9 @@ class AppLocalizations_Labels_Templated_Numbers {
       );
 }
 
-typedef String AppLocalizations_Labels_Templated_Date_simple(
+typedef AppLocalizations_Labels_Templated_Date_simple = String Function(
     {@required DateTime date});
-typedef String AppLocalizations_Labels_Templated_Date_pattern(
+typedef AppLocalizations_Labels_Templated_Date_pattern = String Function(
     {@required DateTime date});
 
 class AppLocalizations_Labels_Templated_Date {
@@ -379,7 +379,7 @@ class AppLocalizations_Labels_Templated {
       );
 }
 
-typedef String AppLocalizations_Labels_Plurals_man(Plural condition);
+typedef AppLocalizations_Labels_Plurals_man = String Function(Plural condition);
 
 class AppLocalizations_Labels_Plurals {
   const AppLocalizations_Labels_Plurals(
