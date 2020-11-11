@@ -1,3 +1,7 @@
+## 2.1.2
+
+- Upgraded dependencies.
+
 ## 2.1.1
 
 - Ignoring `camel_case_types` linter rule.
