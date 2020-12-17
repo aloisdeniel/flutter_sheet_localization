@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 
 part 'localizations.g.dart';
 
-Plural plural(int count) {
-  if (count == 0) return Plural.zero;
-  if (count == 1) return Plural.one;
-  return Plural.multiple;
+extension PluralExtension on int {
+  Plural plural() {
+    if (this == 0) return Plural.zero;
+    if (this == 1) return Plural.one;
+    return Plural.multiple;
+  }
 }
 
 @SheetLocalization('1AcjI1BjmQpjlnPUZ7aVLbrnVR98xtATnSjU4CExM9fs', '0', 15)

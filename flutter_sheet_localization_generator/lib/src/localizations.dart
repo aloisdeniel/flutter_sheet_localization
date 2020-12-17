@@ -241,7 +241,7 @@ class Case {
     @required this.condition,
     @required this.translations,
   })  : assert(assertTranslationsValid(translations)),
-        this.templatedValues =
+        templatedValues =
             translations.isEmpty ? [] : translations.first.templatedValues;
 
   /// Verifies that all translation havez the same templated values (if so).

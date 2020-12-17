@@ -34,10 +34,10 @@ class _MyAppState extends State<MyApp> {
           AppLocalizations.languages.keys.toList(), // <- Supported locales
       home: MyHomePage(
         title: 'Internationalization demo',
-        locale: this._currentLocale,
+        locale: _currentLocale,
         onLocaleChanged: (locale) {
-          if (this._currentLocale != locale) {
-            this.setState(() => this._currentLocale = locale);
+          if (_currentLocale != locale) {
+            setState(() => _currentLocale = locale);
           }
         },
       ),
@@ -87,9 +87,9 @@ class MyHomePage extends StatelessWidget {
                 Text(labels.templated.hello(firstName: 'World')),
                 Text(labels.templated.contact(Gender.male, lastName: 'John')),
                 Text(labels.templated.contact(Gender.female, lastName: 'Jane')),
-                Text('0 ' + labels.plurals.man(plural(0))),
-                Text('1 ' + labels.plurals.man(plural(1))),
-                Text('5 ' + labels.plurals.man(plural(5))),
+                Text('0 ' + labels.plurals.man(0.plural())),
+                Text('1 ' + labels.plurals.man(1.plural())),
+                Text('5 ' + labels.plurals.man(5.plural())),
                 Text(labels.templated.numbers.simple(price: 10)),
                 Text(labels.templated.numbers.formatted(price: 10)),
                 Text(labels.templated.date.simple(date: DateTime.now())),

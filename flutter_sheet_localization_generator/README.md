@@ -8,11 +8,12 @@ Add the following to your `pubspec.yaml`:
 
 ```sh
 dependencies:
-  flutter_sheet_localization: ^1.0.0
+  flutter_sheet_localization: <latest>
+  intl: <latest>
 
 dev_dependencies:
-  flutter_sheet_localization_generator: ^1.0.0
-  build_runner: ^1.3.1
+  flutter_sheet_localization_generator: <latest>
+  build_runner: ^1.10.2
 ```
 
 ### Usage
@@ -115,6 +116,16 @@ The file should have :
   * Column 0 : the label key (can be a hierarchy, separated by dots)
   * then each translation based on language code of the column
 
+### Ignoring a column
+
+Sometimes you may need to add comments for translators. For this, simply add a column with a name between parenthesis and the column will be completely ignored by the generator.
+
+Example :
+
+> | Key | (Comments) | fr | en |
+> | --- | --- | --- | --- |
+> | example.man(Gender.male) | This is a man title on home page | homme | man |
+> | example.man(Gender.female) | This is a woman title on home page | femme | woman |
 
 ### Conditionals
 
@@ -144,13 +155,15 @@ Example :
 > | example.man(Plural.one) | homme | man |
 > | example.man(Plural.multiple) | hommes | men |
 
-From your Dart code, you can then define a function :
+From your Dart code, you can then define an extension :
 
 ```dart
-Plural plural(int count) {
-  if (count == 0) return Plural.zero;
-  if (count == 1) return Plural.one;
-  return Plural.multiple;
+extension PluralExtension on int {
+  Plural plural() {
+    if (this == 0) return Plural.zero;
+    if (this == 1) return Plural.one;
+    return Plural.multiple;
+  }
 }
 ```
 

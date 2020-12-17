@@ -9,6 +9,7 @@ class DartBuilder {
   String build(Localizations localizations) {
     _library = LibraryBuilder();
 
+    _library.body.add(Code('// ignore_for_file: camel_case_types\n\n'));
     _library.body.add(_createLocalization(localizations));
     localizations.categories.forEach((c) => _addCategoryDefinition(c));
     _addSectionDefinition(localizations);
@@ -42,7 +43,7 @@ class DartBuilder {
     );
 
     constructor.initializers.add(
-      Code('this.labels = languages[locale]'),
+      Code('labels = languages[locale]'),
     );
 
     result.fields.add(
@@ -102,12 +103,12 @@ class DartBuilder {
 
       final splits = languageCode.split('-');
 
-      var key = 'Locale.fromSubtags(languageCode: \"${splits.first}\"';
+      var key = 'Locale.fromSubtags(languageCode: \'${splits.first}\'';
       if (splits.length > 2) {
-        key += ', scriptCode: \"${splits[1]}\"';
-        key += ', countryCode: \"${splits[2]}\"';
+        key += ', scriptCode: \'${splits[1]}\'';
+        key += ', countryCode: \'${splits[2]}\'';
       } else if (splits.length > 1) {
-        key += ', countryCode: \"${splits[1]}\"';
+        key += ', countryCode: \'${splits[1]}\'';
       }
       key += ')';
       result.write(key + ' : ' + code + ',');
@@ -177,7 +178,7 @@ class DartBuilder {
           }
         }
       }
-      return '\"' + _excapeString(value) + '\"';
+      return '\'\'\'' + value + '\'\'\'';
     };
 
     result.write(section.normalizedName);
@@ -194,7 +195,7 @@ class DartBuilder {
             orElse: () => Translation(languageCode, '<?' + x.key + '?>'));
 
         if (x.templatedValues.isEmpty) {
-          result.write('\"' + _excapeString(translation.value) + '\"');
+          result.write('\'' + _excapeString(translation.value) + '\'');
         } else {
           final functionArgs =
               x.templatedValues.map((x) => x.normalizedKey).join(', ');
@@ -271,7 +272,7 @@ class DartBuilder {
   }
 
   String _excapeString(String value) =>
-      value.replaceAll('\"', '\\\"').replaceAll('\n', '\\n');
+      value.replaceAll('\'', '\\\'').replaceAll('\n', '\\n');
 
   void _addCategoryDefinition(Category category) {
     final values = category.values.map((x) => x + ',').join();
@@ -316,7 +317,7 @@ class DartBuilder {
           ..name = argName
           ..type = refer(type)
           ..named = true));
-        constructor.initializers.add(Code('this.$name = $argName'));
+        constructor.initializers.add(Code('$name = $argName'));
       } else {
         constructor.optionalParameters.add(Parameter((p) => p
           ..name = name
@@ -368,7 +369,8 @@ class DartBuilder {
         }
 
         _library.body.add(
-          Code('typedef String $functionTypeName($functionArguments);'),
+          Code(
+              'typedef $functionTypeName = String Function($functionArguments);'),
         );
         addField(functionTypeName, '_' + label.normalizedKey);
 
@@ -387,7 +389,7 @@ class DartBuilder {
               ..returns = refer('String')
               ..lambda = true
               ..body = Code(
-                'this._${label.normalizedKey}($conditionCallArgs$templatedCallArgs)',
+                '_${label.normalizedKey}($conditionCallArgs$templatedCallArgs)',
               )
               ..requiredParameters.addAll(categories.isNotEmpty
                   ? [
