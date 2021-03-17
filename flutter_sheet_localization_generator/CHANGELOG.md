@@ -1,3 +1,7 @@
+## 3.0.0
+
+- Upgraded dependencies.
+
 ## 2.1.2
 
 - Upgraded dependencies.
