@@ -14,7 +14,9 @@ dependencies:
   code_builder: ^3.7.0
   source_gen: ^0.9.10+4
   flutter_sheet_localization: 
-    path: ../flutter_sheet_localization
+    git:
+      url: git://github.com/Dokotela/flutter_sheet_localization.git
+      path: flutter_sheet_localization
   build: ^2.0.0
   analyzer: ^1.2.0
   collection: ^1.15.0
