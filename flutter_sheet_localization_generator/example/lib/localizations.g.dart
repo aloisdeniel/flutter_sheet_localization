@@ -9,7 +9,8 @@ part of 'localizations.dart';
 // ignore_for_file: camel_case_types
 
 class AppLocalizations {
-  AppLocalizations(this.locale) : labels = languages[locale];
+  AppLocalizations(this.locale)
+      : labels = languages[locale] ?? languages['en']!;
 
   final Locale locale;
 
@@ -3683,23 +3684,23 @@ class AppLocalizations {
 
   final AppLocalizations_Labels labels;
 
-  static AppLocalizations_Labels of(BuildContext context) =>
+  static AppLocalizations_Labels? of(BuildContext context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations)?.labels;
 }
 
 class AppLocalizations_Labels_Actions {
   const AppLocalizations_Labels_Actions(
-      {this.add,
-      this.back,
-      this.cancel,
-      this.delete,
-      this.home,
-      this.logout,
-      this.ok,
-      this.save,
-      this.search,
-      this.submit,
-      this.addNew});
+      {required this.add,
+      required this.back,
+      required this.cancel,
+      required this.delete,
+      required this.home,
+      required this.logout,
+      required this.ok,
+      required this.save,
+      required this.search,
+      required this.submit,
+      required this.addNew});
 
   final String add;
 
@@ -3754,7 +3755,8 @@ class AppLocalizations_Labels_Actions {
 }
 
 class AppLocalizations_Labels_Address_Neighborhood {
-  const AppLocalizations_Labels_Address_Neighborhood({this.error, this.title});
+  const AppLocalizations_Labels_Address_Neighborhood(
+      {required this.error, required this.title});
 
   final String error;
 
@@ -3773,7 +3775,7 @@ class AppLocalizations_Labels_Address_Neighborhood {
 }
 
 class AppLocalizations_Labels_Address {
-  const AppLocalizations_Labels_Address({this.neighborhood});
+  const AppLocalizations_Labels_Address({required this.neighborhood});
 
   final AppLocalizations_Labels_Address_Neighborhood neighborhood;
 
@@ -3786,7 +3788,7 @@ class AppLocalizations_Labels_Address {
 }
 
 class AppLocalizations_Labels_Age {
-  const AppLocalizations_Labels_Age({this.title});
+  const AppLocalizations_Labels_Age({required this.title});
 
   final String title;
 
@@ -3801,7 +3803,8 @@ class AppLocalizations_Labels_Age {
 }
 
 class AppLocalizations_Labels_App_Title {
-  const AppLocalizations_Labels_App_Title({this.saluddominicana, this.title});
+  const AppLocalizations_Labels_App_Title(
+      {required this.saluddominicana, required this.title});
 
   final String saluddominicana;
 
@@ -3821,11 +3824,11 @@ class AppLocalizations_Labels_App_Title {
 
 class AppLocalizations_Labels_App {
   const AppLocalizations_Labels_App(
-      {this.chooseLanguage,
-      this.chooseTheme,
-      this.settings,
-      this.system,
-      this.title});
+      {required this.chooseLanguage,
+      required this.chooseTheme,
+      required this.settings,
+      required this.system,
+      required this.title});
 
   final String chooseLanguage;
 
@@ -3855,7 +3858,7 @@ class AppLocalizations_Labels_App {
 
 class AppLocalizations_Labels_Auth {
   const AppLocalizations_Labels_Auth(
-      {this.login, this.password, this.userName});
+      {required this.login, required this.password, required this.userName});
 
   final String login;
 
@@ -3878,7 +3881,8 @@ class AppLocalizations_Labels_Auth {
 }
 
 class AppLocalizations_Labels_BirthDate {
-  const AppLocalizations_Labels_BirthDate({this.error, this.title});
+  const AppLocalizations_Labels_BirthDate(
+      {required this.error, required this.title});
 
   final String error;
 
@@ -3898,7 +3902,7 @@ class AppLocalizations_Labels_BirthDate {
 
 class AppLocalizations_Labels_Contacts {
   const AppLocalizations_Labels_Contacts(
-      {this.newContact, this.noContactsAdded});
+      {required this.newContact, required this.noContactsAdded});
 
   final String newContact;
 
@@ -3917,7 +3921,7 @@ class AppLocalizations_Labels_Contacts {
 }
 
 class AppLocalizations_Labels_DateOfBirth {
-  const AppLocalizations_Labels_DateOfBirth({this.title});
+  const AppLocalizations_Labels_DateOfBirth({required this.title});
 
   final String title;
 
@@ -3933,7 +3937,10 @@ class AppLocalizations_Labels_DateOfBirth {
 
 class AppLocalizations_Labels_Gender {
   const AppLocalizations_Labels_Gender(
-      {this.error, this.female, this.male, this.title});
+      {required this.error,
+      required this.female,
+      required this.male,
+      required this.title});
 
   final String error;
 
@@ -3960,7 +3967,7 @@ class AppLocalizations_Labels_Gender {
 }
 
 class AppLocalizations_Labels_General {
-  const AppLocalizations_Labels_General({this.completeError});
+  const AppLocalizations_Labels_General({required this.completeError});
 
   final String completeError;
 
@@ -3975,7 +3982,8 @@ class AppLocalizations_Labels_General {
 }
 
 class AppLocalizations_Labels_Language {
-  const AppLocalizations_Labels_Language({this.inEnglish, this.title});
+  const AppLocalizations_Labels_Language(
+      {required this.inEnglish, required this.title});
 
   final String inEnglish;
 
@@ -3995,16 +4003,16 @@ class AppLocalizations_Labels_Language {
 
 class AppLocalizations_Labels_Medical_Vaccines {
   const AppLocalizations_Labels_Medical_Vaccines(
-      {this.addDate,
-      this.certify,
-      this.dateGiven,
-      this.delete,
-      this.none,
-      this.noPrevious,
-      this.sureDelete,
-      this.title,
-      this.due,
-      this.completed});
+      {required this.addDate,
+      required this.certify,
+      required this.dateGiven,
+      required this.delete,
+      required this.none,
+      required this.noPrevious,
+      required this.sureDelete,
+      required this.title,
+      required this.due,
+      required this.completed});
 
   final String addDate;
 
@@ -4056,13 +4064,13 @@ class AppLocalizations_Labels_Medical_Vaccines {
 
 class AppLocalizations_Labels_Medical {
   const AppLocalizations_Labels_Medical(
-      {this.deworming,
-      this.growth,
-      this.immunization,
-      this.immunizations,
-      this.summaryReport,
-      this.vaccine,
-      this.vaccines});
+      {required this.deworming,
+      required this.growth,
+      required this.immunization,
+      required this.immunizations,
+      required this.summaryReport,
+      required this.vaccine,
+      required this.vaccines});
 
   final String deworming;
 
@@ -4100,14 +4108,14 @@ class AppLocalizations_Labels_Medical {
 
 class AppLocalizations_Labels_Name {
   const AppLocalizations_Labels_Name(
-      {this.familyName,
-      this.familyNameError,
-      this.firstName,
-      this.givenNameError,
-      this.givenNames,
-      this.lastName,
-      this.otherNames,
-      this.title});
+      {required this.familyName,
+      required this.familyNameError,
+      required this.firstName,
+      required this.givenNameError,
+      required this.givenNames,
+      required this.lastName,
+      required this.otherNames,
+      required this.title});
 
   final String familyName;
 
@@ -4151,13 +4159,13 @@ class AppLocalizations_Labels_Name {
 
 class AppLocalizations_Labels_Pages {
   const AppLocalizations_Labels_Pages(
-      {this.allPatients,
-      this.contacts,
-      this.login,
-      this.newPatient,
-      this.patientHome,
-      this.patientInformation,
-      this.summaryReport});
+      {required this.allPatients,
+      required this.contacts,
+      required this.login,
+      required this.newPatient,
+      required this.patientHome,
+      required this.patientInformation,
+      required this.summaryReport});
 
   final String allPatients;
 
@@ -4196,7 +4204,7 @@ class AppLocalizations_Labels_Pages {
 }
 
 class AppLocalizations_Labels_Patient {
-  const AppLocalizations_Labels_Patient({this.title});
+  const AppLocalizations_Labels_Patient({required this.title});
 
   final String title;
 
@@ -4212,7 +4220,7 @@ class AppLocalizations_Labels_Patient {
 
 class AppLocalizations_Labels_Registration {
   const AppLocalizations_Labels_Registration(
-      {this.completed, this.toPatientHomepage});
+      {required this.completed, required this.toPatientHomepage});
 
   final String completed;
 
@@ -4232,22 +4240,22 @@ class AppLocalizations_Labels_Registration {
 
 class AppLocalizations_Labels_Relationships {
   const AppLocalizations_Labels_Relationships(
-      {this.aunt,
-      this.brother,
-      this.daughter,
-      this.error,
-      this.father,
-      this.grandfather,
-      this.grandmother,
-      this.mother,
-      this.nephew,
-      this.niece,
-      this.other,
-      this.relation,
-      this.sister,
-      this.son,
-      this.title,
-      this.uncle});
+      {required this.aunt,
+      required this.brother,
+      required this.daughter,
+      required this.error,
+      required this.father,
+      required this.grandfather,
+      required this.grandmother,
+      required this.mother,
+      required this.nephew,
+      required this.niece,
+      required this.other,
+      required this.relation,
+      required this.sister,
+      required this.son,
+      required this.title,
+      required this.uncle});
 
   final String aunt;
 
@@ -4323,12 +4331,12 @@ class AppLocalizations_Labels_Relationships {
 
 class AppLocalizations_Labels_Settings {
   const AppLocalizations_Labels_Settings(
-      {this.dark,
-      this.language,
-      this.light,
-      this.system,
-      this.theme,
-      this.title});
+      {required this.dark,
+      required this.language,
+      required this.light,
+      required this.system,
+      required this.theme,
+      required this.title});
 
   final String dark;
 
@@ -4364,24 +4372,24 @@ class AppLocalizations_Labels_Settings {
 
 class AppLocalizations_Labels {
   const AppLocalizations_Labels(
-      {this.actions,
-      this.address,
-      this.age,
-      this.app,
-      this.auth,
-      this.birthDate,
-      this.contacts,
-      this.dateOfBirth,
-      this.gender,
-      this.general,
-      this.language,
-      this.medical,
-      this.name,
-      this.pages,
-      this.patient,
-      this.registration,
-      this.relationships,
-      this.settings});
+      {required this.actions,
+      required this.address,
+      required this.age,
+      required this.app,
+      required this.auth,
+      required this.birthDate,
+      required this.contacts,
+      required this.dateOfBirth,
+      required this.gender,
+      required this.general,
+      required this.language,
+      required this.medical,
+      required this.name,
+      required this.pages,
+      required this.patient,
+      required this.registration,
+      required this.relationships,
+      required this.settings});
 
   final AppLocalizations_Labels_Actions actions;
 

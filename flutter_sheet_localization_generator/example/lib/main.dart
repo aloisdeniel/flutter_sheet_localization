@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
 
 import 'localizations.dart';
 
@@ -59,7 +58,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = AppLocalizations.of(context); // <- Accessing your labels
+    final labels = AppLocalizations.of(context)!; // <- Accessing your labels
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -82,19 +81,8 @@ class MyHomePage extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                Text(labels.dates.month.february),
-                Text(labels.multiline),
-                Text(labels.templated.hello(firstName: 'World')),
-                Text(labels.templated.contact(Gender.male, lastName: 'John')),
-                Text(labels.templated.contact(Gender.female, lastName: 'Jane')),
-                Text('0 ' + labels.plurals.man(0.plural())),
-                Text('1 ' + labels.plurals.man(1.plural())),
-                Text('5 ' + labels.plurals.man(5.plural())),
-                Text(labels.templated.numbers.simple(price: 10)),
-                Text(labels.templated.numbers.formatted(price: 10)),
-                Text(labels.templated.date.simple(date: DateTime.now())),
-                Text(labels.templated.date.pattern(date: DateTime.now())),
-
+                Text(labels.actions.add),
+                Text(labels.address.neighborhood.title),
                 /*
                 Text(labels.templated.datetime(DateFormatter.yMd,
                     now: DateTime.now().add(Duration(days: 2)))),

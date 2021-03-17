@@ -71,14 +71,11 @@ class SheetLocalizationGenerator
 
     var response =
         await http.get(url, headers: {'accept': 'text/csv;charset=UTF-8'});
-    print('***************************************************');
     print(response.body);
-    print('***************************************************');
     log.fine('Google sheet csv:\n ${response.body}');
 
     final bytes = response.bodyBytes.toList();
     final csv = Stream<List<int>>.fromIterable([bytes]);
-    print(csv);
 
     final parser = CsvParser(decoder: utf8.decoder);
     return await parser.parse(csv);
