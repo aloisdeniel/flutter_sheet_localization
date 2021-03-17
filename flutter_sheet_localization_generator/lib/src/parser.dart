@@ -7,7 +7,7 @@ import 'localizations.dart';
 class CsvParser {
   final StreamTransformer<List<int>, String> decoder;
 
-  CsvParser({StreamTransformer<List<int>, String> decoder})
+  CsvParser({StreamTransformer<List<int>, String>? decoder})
       : decoder = decoder ?? utf8.decoder;
 
   static const conditionKey = 'condition';
@@ -43,7 +43,7 @@ class CsvParser {
     final index = fields[0]
         .cast<String>()
         .map(_uniformizeKey)
-        .takeWhile((x) => x != null && x.isNotEmpty)
+        .takeWhile((x) => x.isNotEmpty)
         .toList();
 
     // Getting language codes
@@ -85,7 +85,7 @@ class CsvParser {
             path = path.substring(0, startCondition);
           }
 
-          result.insert(path, condition, translations);
+          result.insert(path, condition as String, translations);
         }
       }
     }

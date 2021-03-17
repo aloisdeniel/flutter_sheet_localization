@@ -1,6 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:recase/recase.dart' as recase;
 import 'package:collection/collection.dart';
+import 'package:recase/recase.dart' as recase;
 
 class Localizations extends Section {
   final List<String> supportedLanguageCodes;
@@ -8,9 +7,9 @@ class Localizations extends Section {
 
   Localizations({
     this.name = 'AppLocalizations',
-    @required this.supportedLanguageCodes,
-    List<Label> labels,
-    List<Section> children,
+    required this.supportedLanguageCodes,
+    List<Label>? labels,
+    List<Section>? children,
   }) : super(
             path: [name, 'Labels'],
             children: children,
@@ -18,10 +17,10 @@ class Localizations extends Section {
             key: null);
 
   Localizations copyWith({
-    List<String> supportedLanguageCodes,
-    List<Label> labels,
-    List<Section> children,
-    String name,
+    List<String>? supportedLanguageCodes,
+    List<Label>? labels,
+    List<Section>? children,
+    String? name,
   }) {
     return Localizations(
       supportedLanguageCodes:
@@ -74,10 +73,10 @@ class Section {
   }
 
   Section(
-      {@required this.path,
-      @required String key,
-      List<Label> labels,
-      List<Section> children})
+      {required this.path,
+      String? key,
+      List<Label>? labels,
+      List<Section>? children})
       : key = key ?? 'labels',
         labels = labels ?? [],
         children = children ?? [];
@@ -94,17 +93,14 @@ class Section {
     if (splits.isNotEmpty) {
       final key = splits[0].trim();
       if (splits.length == 1) {
-        final existing = labels.firstWhere(
-          (x) => x.key == key,
-          orElse: () => null,
-        );
+        final existing = labels.indexWhere((x) => x.key == key);
         final condition = Condition.parse(conditionValue);
         final newCase = Case(
           condition: condition,
           translations: translations,
         );
-        if (existing != null) {
-          existing.addCase(newCase);
+        if (existing != -1) {
+          labels[existing].addCase(newCase);
         } else {
           labels.add(
             Label(
@@ -159,8 +155,8 @@ class Label {
   }
 
   Label({
-    @required this.key,
-    @required this.cases,
+    required this.key,
+    required this.cases,
   }) : assert(_areCasesValid(key, cases));
 
   void addCase(Case newCase) {
@@ -168,7 +164,7 @@ class Label {
     _areCasesValid(key, cases);
   }
 
-  Category get category {
+  Category? get category {
     final values = cases
         .where((x) => x.condition is CategoryCondition)
         .map((x) => x.condition as CategoryCondition);
@@ -202,7 +198,7 @@ class Label {
 
 abstract class Condition {
   const Condition();
-  factory Condition.parse(String value) {
+  factory Condition.parse(String? value) {
     if (value == null) return const DefaultCondition();
     value = value.trim();
     if (value.isEmpty) return const DefaultCondition();
@@ -238,9 +234,9 @@ class Case {
   final List<Translation> translations;
   final List<TemplatedValue> templatedValues;
   Case({
-    @required this.condition,
-    @required this.translations,
-  })  : assert(assertTranslationsValid(translations)),
+    required this.condition,
+    required this.translations,
+  })   : assert(assertTranslationsValid(translations)),
         templatedValues =
             translations.isEmpty ? [] : translations.first.templatedValues;
 
@@ -263,7 +259,7 @@ class Case {
 
 /// Represents a translation of a label in a given language.
 class Translation {
-  final Case condition;
+  final Case? condition;
   final String languageCode;
   final String value;
   final List<TemplatedValue> templatedValues;
@@ -340,9 +336,11 @@ class TemplatedValue {
             match.start,
             match.end,
             match.input.substring(match.start, match.end),
-            match.group(1),
+
+            /// TODO: unsure what to do about group 1 & 5 if null
+            match.group(1) ?? value,
             match.group(3) ?? 'String',
-            match.group(5),
+            match.group(5) ?? value,
           ),
         )
         .toList();

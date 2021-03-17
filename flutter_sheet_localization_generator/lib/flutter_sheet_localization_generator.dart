@@ -34,21 +34,26 @@ class SheetLocalizationGenerator
           element: element);
     }
 
-    final classElement = element as ClassElement;
+    final classElement = element;
 
-    final localizationDelegateSupertype = classElement.allSupertypes
-        .firstWhere((x) => x.name == 'LocalizationsDelegate');
-    if (localizationDelegateSupertype != null) {
-      final docId = annotation.objectValue.getField('docId').toStringValue();
+    final localizationDelegateSupertype = classElement.allSupertypes.indexWhere(
+        (x) =>
+            x.getDisplayString(withNullability: true) ==
+            'LocalizationsDelegate<dynamic>');
+
+    if (localizationDelegateSupertype != -1) {
+      final docId = annotation.objectValue.getField('docId')?.toStringValue();
       final sheetId =
-          annotation.objectValue.getField('sheetId').toStringValue();
-      var localizations = await _downloadGoogleSheet(docId, sheetId);
+          annotation.objectValue.getField('sheetId')?.toStringValue();
+      if (docId != null && sheetId != null) {
+        var localizations = await _downloadGoogleSheet(docId, sheetId);
 
-      localizations = localizations.copyWith(
-          name: classElement.name.replaceAll('Delegate', ''));
+        localizations = localizations.copyWith(
+            name: classElement.name.replaceAll('Delegate', ''));
 
-      final builder = DartBuilder();
-      return builder.build(localizations);
+        final builder = DartBuilder();
+        return builder.build(localizations);
+      }
     }
     throw InvalidGenerationSourceError(
         'Supertype aren\'t valid : [${classElement.allSupertypes.join(', ')}].',
@@ -59,18 +64,21 @@ class SheetLocalizationGenerator
 
   Future<Localizations> _downloadGoogleSheet(
       String documentId, String sheetId) async {
-    final url =
-        'https://docs.google.com/spreadsheets/d/$documentId/export?format=csv&id=$documentId&gid=$sheetId';
+    final url = Uri.parse(
+        'https://docs.google.com/spreadsheets/d/$documentId/export?format=csv&id=$documentId&gid=$sheetId');
 
     log.info('Downloading csv from Google sheet url "$url" ...');
 
     var response =
         await http.get(url, headers: {'accept': 'text/csv;charset=UTF-8'});
-
+    print('***************************************************');
+    print(response.body);
+    print('***************************************************');
     log.fine('Google sheet csv:\n ${response.body}');
 
     final bytes = response.bodyBytes.toList();
     final csv = Stream<List<int>>.fromIterable([bytes]);
+    print(csv);
 
     final parser = CsvParser(decoder: utf8.decoder);
     return await parser.parse(csv);

@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Null-safety!
+
 ## 2.0.1
 
 - Removed pedantic dependency.

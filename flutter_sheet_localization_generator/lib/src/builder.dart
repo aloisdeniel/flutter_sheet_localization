@@ -4,19 +4,19 @@ import 'package:dart_style/dart_style.dart';
 import 'localizations.dart';
 
 class DartBuilder {
-  LibraryBuilder _library;
+  LibraryBuilder? _library;
 
   String build(Localizations localizations) {
     _library = LibraryBuilder();
 
-    _library.body.add(Code('// ignore_for_file: camel_case_types\n\n'));
-    _library.body.add(_createLocalization(localizations));
+    _library!.body.add(Code('// ignore_for_file: camel_case_types\n\n'));
+    _library!.body.add(_createLocalization(localizations));
     localizations.categories.forEach((c) => _addCategoryDefinition(c));
     _addSectionDefinition(localizations);
 
     // Code generation
     final emitter = DartEmitter();
-    final source = '${_library.build().accept(emitter)}';
+    final source = '${_library!.build().accept(emitter)}';
     return DartFormatter().format(source);
   }
 
@@ -123,7 +123,7 @@ class DartBuilder {
     final result = StringBuffer();
 
     final templatedString = (String value, List<TemplatedValue> templatedValues,
-        [String condition]) {
+        [String? condition]) {
       if (templatedValues.isNotEmpty) {
         for (var templatedValue in templatedValues) {
           if (templatedValue.type == 'DateTime') {
@@ -237,12 +237,11 @@ class DartBuilder {
           }
         }
 
-        final defaultCase = x.cases.firstWhere(
-            (x) => x.condition is DefaultCondition,
-            orElse: () => null);
+        final defaultCase =
+            x.cases.indexWhere((x) => x.condition is DefaultCondition);
 
-        if (defaultCase != null) {
-          final translation = defaultCase.translations.firstWhere(
+        if (defaultCase != -1) {
+          final translation = x.cases[defaultCase].translations.firstWhere(
               (x) => x.languageCode == languageCode,
               orElse: () => Translation(languageCode, '<?' + x.key + '?>'));
 
@@ -277,7 +276,7 @@ class DartBuilder {
   void _addCategoryDefinition(Category category) {
     final values = category.values.map((x) => x + ',').join();
     final code = Code('enum ${category.normalizedKey} { $values }');
-    _library.body.add(code);
+    _library!.body.add(code);
   }
 
   String _getLabelsCase(List<Label> labels) {
@@ -353,7 +352,7 @@ class DartBuilder {
 
         final categories =
             label.cases.where((x) => x.condition is CategoryCondition);
-        Category category;
+        Category? category;
         if (categories.isNotEmpty) {
           category = (categories.first.condition as CategoryCondition).category;
           functionArguments += '${category.normalizedKey} condition';
@@ -368,7 +367,7 @@ class DartBuilder {
               '}';
         }
 
-        _library.body.add(
+        _library!.body.add(
           Code(
               'typedef $functionTypeName = String Function($functionArguments);'),
         );
@@ -395,7 +394,7 @@ class DartBuilder {
                   ? [
                       Parameter(
                         (b) => b
-                          ..type = refer(category.normalizedKey)
+                          ..type = refer(category?.normalizedKey)
                           ..name = 'condition',
                       )
                     ]
@@ -425,6 +424,6 @@ class DartBuilder {
 
     result.constructors.add(constructor.build());
 
-    _library.body.add(result.build());
+    _library!.body.add(result.build());
   }
 }
