@@ -71,7 +71,6 @@ class SheetLocalizationGenerator
 
     var response =
         await http.get(url, headers: {'accept': 'text/csv;charset=UTF-8'});
-    print(response.body);
     log.fine('Google sheet csv:\n ${response.body}');
 
     final bytes = response.bodyBytes.toList();
