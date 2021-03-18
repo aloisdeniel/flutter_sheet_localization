@@ -39,7 +39,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
-part 'localization.g.dart';
+part 'localizations.g.dart';
 
 @SheetLocalization("DOCID", "SHEETID", 1) // <- See 1. to get DOCID and SHEETID
 // the `1` is the generated version. You must increment it each time you want to regenerate
