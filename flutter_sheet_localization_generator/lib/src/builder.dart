@@ -4,7 +4,7 @@ import 'package:dart_style/dart_style.dart';
 import 'localizations.dart';
 
 class DartBuilder {
-  LibraryBuilder _library;
+  late LibraryBuilder _library;
 
   String build(Localizations localizations) {
     _library = LibraryBuilder();
@@ -43,7 +43,7 @@ class DartBuilder {
     );
 
     constructor.initializers.add(
-      Code('labels = languages[locale]'),
+      Code('labels = languages[locale]!'),
     );
 
     result.fields.add(
@@ -76,7 +76,7 @@ class DartBuilder {
           ..static = true
           ..returns = refer(localizations.normalizedName)
           ..body = Code(
-            'Localizations.of<${localizations.name}>(context, ${localizations.name})?.labels',
+            'Localizations.of<${localizations.name}>(context, ${localizations.name})!.labels',
           )
           ..requiredParameters.add(
             Parameter(
@@ -122,8 +122,7 @@ class DartBuilder {
   String _createSectionInstance(String languageCode, Section section) {
     final result = StringBuffer();
 
-    final templatedString = (String value, List<TemplatedValue> templatedValues,
-        [String condition]) {
+    final templatedString = (String value, List<TemplatedValue> templatedValues, [String? condition]) {
       if (templatedValues.isNotEmpty) {
         for (var templatedValue in templatedValues) {
           if (templatedValue.type == 'DateTime') {
@@ -155,11 +154,8 @@ class DartBuilder {
               ].contains(templatedValue.formatting)) {
                 value = value.replaceFirst(templatedValue.value,
                     "\$\{NumberFormat.${templatedValue.formatting}(locale: '$languageCode').format(${templatedValue.normalizedKey})\}");
-              } else if ([
-                'decimalPattern',
-                'percentPattern',
-                'scientificPattern'
-              ].contains(templatedValue.formatting)) {
+              } else if (['decimalPattern', 'percentPattern', 'scientificPattern']
+                  .contains(templatedValue.formatting)) {
                 value = value.replaceFirst(templatedValue.value,
                     "\$\{NumberFormat.${templatedValue.formatting}('$languageCode').format(${templatedValue.normalizedKey})\}");
               } else if (templatedValue.formatting == 'format') {
@@ -173,8 +169,7 @@ class DartBuilder {
               );
             }
           } else {
-            value = value.replaceFirst(
-                templatedValue.value, '\$\{${templatedValue.normalizedKey}\}');
+            value = value.replaceFirst(templatedValue.value, '\$\{${templatedValue.normalizedKey}\}');
           }
         }
       }
@@ -190,65 +185,52 @@ class DartBuilder {
 
       if (x.cases.length == 1 && x.cases.first.condition is DefaultCondition) {
         // Single case
-        final translation = x.cases.first.translations.firstWhere(
-            (x) => x.languageCode == languageCode,
+        final translation = x.cases.first.translations.firstWhere((x) => x.languageCode == languageCode,
             orElse: () => Translation(languageCode, '<?' + x.key + '?>'));
 
         if (x.templatedValues.isEmpty) {
           result.write('\'' + _excapeString(translation.value) + '\'');
         } else {
-          final functionArgs =
-              x.templatedValues.map((x) => x.normalizedKey).join(', ');
+          final functionArgs = x.templatedValues.map((x) => 'required ' + x.normalizedKey).join(', ');
 
           // We replace all occurences of `{{original_key}}` by `$originalKey`
-          result.write('(\{$functionArgs\}) => ' +
-              templatedString(translation.value, x.templatedValues));
+          result.write('(\{$functionArgs\}) => ' + templatedString(translation.value, x.templatedValues));
         }
       } else {
         // Multiple cases
         var functionArgs = 'condition';
 
         if (x.templatedValues.isNotEmpty) {
-          functionArgs += ', {' +
-              x.templatedValues.map((x) => x.normalizedKey).join(', ') +
-              '}';
+          functionArgs += ', {' + x.templatedValues.map((x) => 'required ' + x.normalizedKey).join(', ') + '}';
         }
 
         result.write('($functionArgs) {');
 
-        final categoryConditions =
-            x.cases.where((x) => x.condition is CategoryCondition).toList();
+        final categoryConditions = x.cases.where((x) => x.condition is CategoryCondition).toList();
         if (categoryConditions.isNotEmpty) {
           for (var oneCase in categoryConditions) {
             final condition = oneCase.condition as CategoryCondition;
-            result.write(
-                'if(condition == ${condition.category.normalizedKey}.${condition.value})');
+            result.write('if(condition == ${condition.category.normalizedKey}.${condition.value})');
 
-            final translation = oneCase.translations.firstWhere(
-                (x) => x.languageCode == languageCode,
+            final translation = oneCase.translations.firstWhere((x) => x.languageCode == languageCode,
                 orElse: () => Translation(languageCode, '<?' + x.key + '?>'));
 
             result.write(
-              'return ' +
-                  templatedString(
-                      translation.value, x.templatedValues, condition.value) +
-                  ';',
+              'return ' + templatedString(translation.value, x.templatedValues, condition.value) + ';',
             );
           }
         }
-
-        final defaultCase = x.cases.firstWhere(
-            (x) => x.condition is DefaultCondition,
-            orElse: () => null);
-
+        Case? defaultCase;
+        try {
+          defaultCase = x.cases.firstWhere((x) => x.condition is DefaultCondition);
+        } catch (e) {
+          defaultCase = null;
+        }
         if (defaultCase != null) {
-          final translation = defaultCase.translations.firstWhere(
-              (x) => x.languageCode == languageCode,
+          final translation = defaultCase.translations.firstWhere((x) => x.languageCode == languageCode,
               orElse: () => Translation(languageCode, '<?' + x.key + '?>'));
 
-          result.write('return ' +
-              templatedString(translation.value, x.templatedValues) +
-              ';');
+          result.write('return ' + templatedString(translation.value, x.templatedValues) + ';');
         } else {
           result.write('throw Exception();');
         }
@@ -271,8 +253,7 @@ class DartBuilder {
     return result.toString();
   }
 
-  String _excapeString(String value) =>
-      value.replaceAll('\'', '\\\'').replaceAll('\n', '\\n');
+  String _excapeString(String value) => value.replaceAll('\'', '\\\'').replaceAll('\n', '\\n');
 
   void _addCategoryDefinition(Category category) {
     final values = category.values.map((x) => x + ',').join();
@@ -283,9 +264,7 @@ class DartBuilder {
   String _getLabelsCase(List<Label> labels) {
     final results = StringBuffer('switch (key) {');
     labels.forEach((label) {
-      if (label.templatedValues.isEmpty &&
-          label.cases.length == 1 &&
-          label.cases.first.condition is DefaultCondition) {
+      if (label.templatedValues.isEmpty && label.cases.length == 1 && label.cases.first.condition is DefaultCondition) {
         results.write("case '");
         results.write(label.normalizedKey);
         results.write("'");
@@ -313,14 +292,18 @@ class DartBuilder {
 
       if (name.startsWith('_')) {
         final argName = name.replaceFirst('_', '');
-        constructor.optionalParameters.add(Parameter((p) => p
-          ..name = argName
-          ..type = refer(type)
-          ..named = true));
+        constructor.optionalParameters.add(Parameter(
+          (p) => p
+            ..name = argName
+            ..type = refer(type)
+            ..named = true
+            ..required = true,
+        ));
         constructor.initializers.add(Code('$name = $argName'));
       } else {
         constructor.optionalParameters.add(Parameter((p) => p
           ..name = name
+          ..required = true
           ..named = true
           ..toThis = true));
       }
@@ -341,19 +324,15 @@ class DartBuilder {
     );
 
     section.labels.forEach((label) {
-      if (label.templatedValues.isEmpty &&
-          label.cases.length == 1 &&
-          label.cases.first.condition is DefaultCondition) {
+      if (label.templatedValues.isEmpty && label.cases.length == 1 && label.cases.first.condition is DefaultCondition) {
         addField('String', label.normalizedKey);
       } else {
         // If we have templated values, a function is generated
-        final functionTypeName =
-            section.normalizedName + '_' + label.normalizedKey;
+        final functionTypeName = section.normalizedName + '_' + label.normalizedKey;
         var functionArguments = '';
 
-        final categories =
-            label.cases.where((x) => x.condition is CategoryCondition);
-        Category category;
+        final categories = label.cases.where((x) => x.condition is CategoryCondition);
+        late Category category;
         if (categories.isNotEmpty) {
           category = (categories.first.condition as CategoryCondition).category;
           functionArguments += '${category.normalizedKey} condition';
@@ -361,23 +340,17 @@ class DartBuilder {
 
         if (label.templatedValues.isNotEmpty) {
           if (functionArguments.isNotEmpty) functionArguments += ',';
-          functionArguments += '{' +
-              label.templatedValues
-                  .map((x) => '@required ${x.type} ${x.normalizedKey}')
-                  .join(', ') +
-              '}';
+          functionArguments +=
+              '{' + label.templatedValues.map((x) => 'required ${x.type} ${x.normalizedKey}').join(', ') + '}';
         }
 
         _library.body.add(
-          Code(
-              'typedef $functionTypeName = String Function($functionArguments);'),
+          Code('typedef $functionTypeName = String Function($functionArguments);'),
         );
         addField(functionTypeName, '_' + label.normalizedKey);
 
         final templatedCallArgs = label.templatedValues.isNotEmpty
-            ? label.templatedValues
-                .map((x) => '${x.normalizedKey}: ${x.normalizedKey},')
-                .join()
+            ? label.templatedValues.map((x) => '${x.normalizedKey}: ${x.normalizedKey},').join()
             : '';
         final conditionCallArgs = categories.isNotEmpty ? 'condition, ' : '';
 
@@ -402,15 +375,15 @@ class DartBuilder {
                   : [])
               ..optionalParameters.addAll(
                 label.templatedValues.map(
-                  (x) => Parameter(
-                    (b) => b
-                      ..name = x.normalizedKey
-                      ..named = true
-                      ..type = refer(x.type)
-                      ..annotations.add(
-                        refer('required'),
+                  (x) => Parameter((b) => b
+                        ..name = x.normalizedKey
+                        ..named = true
+                        ..type = refer(x.type)
+                        ..required = true
+                      // ..annotations.add(
+                      //   refer('required'),
+                      // ),
                       ),
-                  ),
                 ),
               ),
           ),

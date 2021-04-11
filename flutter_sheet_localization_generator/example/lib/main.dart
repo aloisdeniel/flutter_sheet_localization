@@ -12,7 +12,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _currentLocale;
+  Locale? _currentLocale;
 
   @override
   void initState() {
@@ -30,8 +30,7 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales:
-          AppLocalizations.languages.keys.toList(), // <- Supported locales
+      supportedLocales: AppLocalizations.languages.keys.toList(), // <- Supported locales
       home: MyHomePage(
         title: 'Internationalization demo',
         locale: _currentLocale,
@@ -46,16 +45,11 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage(
-      {Key key,
-      this.title,
-      @required this.locale,
-      @required this.onLocaleChanged})
-      : super(key: key);
+  MyHomePage({Key? key, required this.title, required this.locale, required this.onLocaleChanged}) : super(key: key);
 
   final String title;
-  final Locale locale;
-  final ValueChanged<Locale> onLocaleChanged;
+  final Locale? locale;
+  final ValueChanged<Locale?>? onLocaleChanged;
 
   @override
   Widget build(BuildContext context) {
