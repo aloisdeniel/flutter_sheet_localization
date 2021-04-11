@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:csv/csv.dart';
 
 import 'localizations.dart';
@@ -7,8 +8,7 @@ import 'localizations.dart';
 class CsvParser {
   final StreamTransformer<List<int>, String> decoder;
 
-  CsvParser({StreamTransformer<List<int>, String> decoder})
-      : decoder = decoder ?? utf8.decoder;
+  CsvParser({StreamTransformer<List<int>, String>? decoder}) : decoder = decoder ?? utf8.decoder;
 
   static const conditionKey = 'condition';
   static const keyKey = 'key';
@@ -28,9 +28,7 @@ class CsvParser {
 
   bool _isReservedKey(String key) => reservedIndexKeys.contains(key);
 
-  bool _isLanguageKey(String key) =>
-      !_isReservedKey(key) &&
-      !(key.trim().startsWith('(') && key.trim().endsWith(')'));
+  bool _isLanguageKey(String key) => !_isReservedKey(key) && !(key.trim().startsWith('(') && key.trim().endsWith(')'));
 
   Future<Localizations> parse(Stream<List<int>> input) async {
     final fields = await input
@@ -40,11 +38,7 @@ class CsvParser {
         ))
         .toList();
 
-    final index = fields[0]
-        .cast<String>()
-        .map(_uniformizeKey)
-        .takeWhile((x) => x != null && x.isNotEmpty)
-        .toList();
+    final index = fields[0].cast<String>().map(_uniformizeKey).takeWhile((x) => x != null && x.isNotEmpty).toList();
 
     // Getting language codes
     final result = Localizations(
@@ -72,10 +66,8 @@ class CsvParser {
       if (key != null && key.isNotEmpty) {
         var path = key.trim();
         if (path.isNotEmpty) {
-          final translations = row.entries
-              .where((e) => _isLanguageKey(e.key))
-              .map((e) => Translation(e.key, e.value))
-              .toList();
+          final translations =
+              row.entries.where((e) => _isLanguageKey(e.key)).map((e) => Translation(e.key, e.value)).toList();
 
           // We can also have a condition at the end of the key in parenthesis
           final startCondition = path.indexOf('(');
