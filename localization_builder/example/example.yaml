@@ -1,0 +1,62 @@
+fr:
+  dates:
+    weekday:
+      monday: lundi
+      tuesday: mardi
+      wednesday: mercredi
+  templated:
+    hello: Bonjour {{first_name}}!
+    contact: 
+      cases:
+        Gender.male: M. {{last_name}}
+        Gender.female: Mme. {{last_name}}
+    numbers:
+      count: Il y a {{count:int}} éléments.
+      simple: Le prix est de {{price:double}}€
+      formatted: Le prix est de {{price:double[compactCurrency]}}
+    date:
+      simple: "Aujourd'hui : {{date:DateTime}}"
+      pattern: "Aujourd'hui : {{date:DateTime[EEE, M/d/y]}}"
+  plurals:
+    man:
+      cases:
+        Plural.zero: hommes
+        Plural.one: homme
+        Plural.multiple: hommes
+  multiline:
+    C'est
+
+    une
+
+    exemple multiligne.
+en_US:
+  dates:
+    weekday:
+      monday: monday
+      tuesday: tuesday
+      wednesday: wednesday
+  templated:
+    hello: Hello {{first_name}}!
+    contact: 
+      cases:
+        Gender.male: Mr {{last_name}}
+        Gender.female: Mrs {{last_name}}
+    numbers:
+      count: There are {{count:int}} items.
+      simple: The price is {{price:double}}$
+      formatted: The price is {{price:double[compactCurrency]}}
+    date:
+      simple: "Today : {{date:DateTime}}"
+      pattern: "Today : {{date:DateTime[EEE, M/d/y]}}"
+  plurals:
+    man:
+      cases:
+        Plural.zero: man
+        Plural.one: man
+        Plural.multiple: men
+  multiline:
+    This is
+
+    a
+
+    multiline example.

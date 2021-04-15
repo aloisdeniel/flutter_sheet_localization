@@ -1,3 +1,8 @@
+## 5.1.0
+
+- Upgraded dependencies
+- Added JSON serialization support
+
 ## 3.0.0
 
 - Upgraded dependencies.

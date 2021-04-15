@@ -1,3 +1,15 @@
+## 5.1.0
+
+- Removing intl locale exposure.
+
+## 5.0.0
+
+- Upgraded template_string dependency.
+
+## 4.0.0
+
+- Added dependency to template_string.
+
 ## 3.0.0
 
 - Upgraded dart SDK constraint.

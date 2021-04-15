@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
 
 import 'localizations.dart';
 
@@ -12,11 +11,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _currentLocale;
+  Locale? _currentLocale;
 
   @override
   void initState() {
-    _currentLocale = AppLocalizations.languages.keys.first;
+    _currentLocale = localizedLabels.keys.first;
     super.initState();
   }
 
@@ -30,11 +29,10 @@ class _MyAppState extends State<MyApp> {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales:
-          AppLocalizations.languages.keys.toList(), // <- Supported locales
+      supportedLocales: localizedLabels.keys.toList(), // <- Supported locales
       home: MyHomePage(
         title: 'Internationalization demo',
-        locale: _currentLocale,
+        locale: _currentLocale!,
         onLocaleChanged: (locale) {
           if (_currentLocale != locale) {
             setState(() => _currentLocale = locale);
@@ -47,10 +45,10 @@ class _MyAppState extends State<MyApp> {
 
 class MyHomePage extends StatelessWidget {
   MyHomePage(
-      {Key key,
-      this.title,
-      @required this.locale,
-      @required this.onLocaleChanged})
+      {Key? key,
+      required this.title,
+      required this.locale,
+      required this.onLocaleChanged})
       : super(key: key);
 
   final String title;
@@ -59,7 +57,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = AppLocalizations.of(context); // <- Accessing your labels
+    final labels = context.localizations; // <- Accessing your labels
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -69,7 +67,7 @@ class MyHomePage extends StatelessWidget {
           DropdownButton<Locale>(
             key: Key('Picker'),
             value: locale,
-            items: AppLocalizations.languages.keys.map((locale) {
+            items: localizedLabels.keys.map((locale) {
               return DropdownMenuItem<Locale>(
                 value: locale,
                 child: Text(
@@ -77,7 +75,9 @@ class MyHomePage extends StatelessWidget {
                 ),
               );
             }).toList(),
-            onChanged: onLocaleChanged,
+            onChanged: (locale) {
+              if (locale != null) onLocaleChanged(locale);
+            },
           ),
           Expanded(
             child: Column(
@@ -85,11 +85,13 @@ class MyHomePage extends StatelessWidget {
                 Text(labels.dates.month.february),
                 Text(labels.multiline),
                 Text(labels.templated.hello(firstName: 'World')),
-                Text(labels.templated.contact(Gender.male, lastName: 'John')),
-                Text(labels.templated.contact(Gender.female, lastName: 'Jane')),
-                Text('0 ' + labels.plurals.man(0.plural())),
-                Text('1 ' + labels.plurals.man(1.plural())),
-                Text('5 ' + labels.plurals.man(5.plural())),
+                Text(labels.templated
+                    .contact(gender: Gender.male, lastName: 'John')),
+                Text(labels.templated
+                    .contact(gender: Gender.female, lastName: 'Jane')),
+                Text('0 ' + labels.plurals.man(plural: 0.plural())),
+                Text('1 ' + labels.plurals.man(plural: 1.plural())),
+                Text('5 ' + labels.plurals.man(plural: 5.plural())),
                 Text(labels.templated.numbers.simple(price: 10)),
                 Text(labels.templated.numbers.formatted(price: 10)),
                 Text(labels.templated.date.simple(date: DateTime.now())),

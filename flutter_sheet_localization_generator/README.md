@@ -9,11 +9,12 @@ Add the following to your `pubspec.yaml`:
 ```sh
 dependencies:
   flutter_sheet_localization: <latest>
-  intl: <latest>
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_sheet_localization_generator: <latest>
-  build_runner: ^1.10.2
+  build_runner: <latest>
 ```
 
 ### Usage
@@ -44,18 +45,20 @@ part 'localization.g.dart';
 @SheetLocalization("DOCID", "SHEETID", 1) // <- See 1. to get DOCID and SHEETID
 // the `1` is the generated version. You must increment it each time you want to regenerate
 // a new version of the labels.
-class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizationsData> {
   const AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      AppLocalizations.languages.containsKey(locale);
+  bool isSupported(Locale locale) => localizedLabels.containsKey(locale);
+
   @override
-  Future<AppLocalizations> load(Locale locale) =>
-      SynchronousFuture<AppLocalizations>(AppLocalizations(locale));
+  Future<AppLocalizationsData> load(Locale locale) =>
+      SynchronousFuture<AppLocalizationsData>(localizedLabels[locale]!);
   @override
   bool shouldReload(AppLocalizationsDelegate old) => false;
 }
+
 ```
 
 #### 3. Generate your localizations
