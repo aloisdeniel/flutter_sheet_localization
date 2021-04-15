@@ -1,3 +1,7 @@
+## 0.15.1
+
+- Fixed when multiple templated values.
+
 ## 0.15.0
 
 - Using `Locale` from `dart:ui` instead of `intl`.

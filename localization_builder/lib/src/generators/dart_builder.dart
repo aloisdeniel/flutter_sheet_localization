@@ -234,7 +234,7 @@ import 'package:template_string/template_string.dart';
             body.write('.insertTemplateValues({');
             for (var templatedValue in label.templatedValues) {
               body.write(
-                  '\'${templatedValue.key}\' : ${createFieldName(templatedValue.key)}');
+                  '\'${templatedValue.key}\' : ${createFieldName(templatedValue.key)},');
             }
             body.write('}, locale : locale,)');
           }
@@ -249,7 +249,7 @@ import 'package:template_string/template_string.dart';
             body.write('.insertTemplateValues({');
             for (var templatedValue in label.templatedValues) {
               body.write(
-                  '\'${templatedValue.key}\' : ${createFieldName(templatedValue.key)}');
+                  '\'${templatedValue.key}\' : ${createFieldName(templatedValue.key)},');
             }
             body.write('}, locale: locale,)');
           }
