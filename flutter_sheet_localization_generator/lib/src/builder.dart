@@ -392,7 +392,7 @@ class DartBuilder {
                   ? [
                       Parameter(
                         (b) => b
-                          ..type = refer(category?.normalizedKey)
+                          ..type = refer(category!.normalizedKey)
                           ..name = 'condition',
                       )
                     ]
