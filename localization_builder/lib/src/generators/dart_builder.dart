@@ -143,18 +143,6 @@ import 'package:template_string/template_string.dart';
       isConst: true,
     );
 
-    for (var child in section.children) {
-      final childPath = [
-        ...path,
-        child.normalizedKey,
-      ];
-      result.addProperty(
-        _buildClassNameFromPath(childPath),
-        createFieldName(child.key),
-        jsonConverter: fromJsonPropertyBuilderJsonConverter,
-      );
-    }
-
     for (var label in section.labels) {
       if (label.templatedValues.isEmpty &&
           label.cases.length == 1 &&
@@ -268,6 +256,19 @@ import 'package:template_string/template_string.dart';
         );
       }
     }
+
+    for (var child in section.children) {
+      final childPath = [
+        ...path,
+        child.normalizedKey,
+      ];
+      result.addProperty(
+        _buildClassNameFromPath(childPath),
+        createFieldName(child.key),
+        jsonConverter: fromJsonPropertyBuilderJsonConverter,
+      );
+    }
+
     _buffer.writeln(
       result.build(
         nullSafety: nullSafety,

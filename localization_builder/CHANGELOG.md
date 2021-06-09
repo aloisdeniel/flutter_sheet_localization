@@ -1,3 +1,15 @@
+## 0.15.6
+
+- Fixed sub section key issue.
+
+## 0.15.3
+
+- Fixed issue with depp labels inserted multiple times.
+
+## 0.15.2
+
+- Inverted priority between labels and children.
+
 ## 0.15.1
 
 - Fixed when multiple templated values.

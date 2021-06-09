@@ -118,7 +118,7 @@ class Section extends Equatable {
     while (pathSplits.isNotEmpty) {
       child = Section(
         key: pathSplits.last,
-        labels: [label],
+        labels: [],
         children: [child],
       );
       pathSplits = pathSplits.take(pathSplits.length - 1).toList();
