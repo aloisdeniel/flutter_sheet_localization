@@ -1,3 +1,7 @@
+## 5.1.1
+
+- Upgraded required dart sdk.
+
 ## 5.1.0
 
 - Removing intl locale exposure.

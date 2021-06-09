@@ -1,3 +1,7 @@
+## 0.15.7
+
+- Upgraded recase dependency.
+
 ## 0.15.6
 
 - Fixed sub section key issue.
