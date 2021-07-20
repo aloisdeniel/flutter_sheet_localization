@@ -96,9 +96,9 @@ MaterialApp(
 #### 5. Display your labels
 
 ```dart
-print(localizations.dates.month.february);
-print(localizations.templated.hello(firstName: "World"));
-print(localizations.templated.contact(Gender.male, lastName: "John"));
+print(context.localizations.dates.month.february);
+print(context.localizations.templated.hello(firstName: "World"));
+print(context.localizations.templated.contact(Gender.male, lastName: "John"));
 ```
 
 ## Regeneration
