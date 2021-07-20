@@ -42,6 +42,12 @@ import 'package:flutter_sheet_localization/flutter_sheet_localization.dart';
 
 part 'localization.g.dart';
 
+extension AppLocalizationsExtensions on BuildContext {
+  AppLocalizationsData get localizations {
+    return Localizations.of<AppLocalizationsData>(this, AppLocalizationsData)!;
+  }
+}
+
 @SheetLocalization("DOCID", "SHEETID", 1) // <- See 1. to get DOCID and SHEETID
 // the `1` is the generated version. You must increment it each time you want to regenerate
 // a new version of the labels.
@@ -75,14 +81,14 @@ Update your Flutter app with your newly created delegate :
 
 ```dart
 MaterialApp(
-    locale: AppLocalizations.languages.keys.first, // <- Current locale
+    locale: localizedLabels.keys.first, // <- Current locale
     localizationsDelegates: [
     const AppLocalizationsDelegate(), // <- Your custom delegate
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
     ],
     supportedLocales:
-        AppLocalizations.languages.keys.toList(), // <- Supported locales
+        localizedLabels.keys.first, // <- Supported locales
     // ...
 );
 ```
@@ -90,10 +96,9 @@ MaterialApp(
 #### 5. Display your labels
 
 ```dart
-final labels = AppLocalizations.of(context);
-print(labels.dates.month.february);
-print(labels.templated.hello(firstName: "World"));
-print(labels.templated.contact(Gender.male, lastName: "John"));
+print(context.localizations.dates.month.february);
+print(context.localizations.templated.hello(firstName: "World"));
+print(context.localizations.templated.contact(Gender.male, lastName: "John"));
 ```
 
 ## Regeneration
