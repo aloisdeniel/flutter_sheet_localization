@@ -8,17 +8,13 @@ part of 'localizations.dart';
 
 final localizedLabels = <Locale, AppLocalizationsData>{
   Locale.fromSubtags(languageCode: 'fr'): const AppLocalizationsData(
-    multiline: 'C\'est\n\nune\n\nexemple multiligne.',
+    multiline: 'C\'est\n\nune\n\nExemple multiligne.',
     plurals: const AppLocalizationsDataPlurals(
       manMultiple: 'hommes',
       manOne: 'homme',
       manZero: 'hommes',
     ),
     templated: const AppLocalizationsDataTemplated(
-      pattern: 'Aujourd\'hui : {{date:DateTime[EEE, M/d/y]}}',
-      simple: 'Aujourd\'hui : {{date:DateTime}}',
-      formatted: 'Le prix est de {{price:double[compactCurrency]}}',
-      count: 'Il y a {{count:int}} éléments.',
       contactFemale: 'Mme {{last_name}}',
       contactMale: 'M. {{last_name}}',
       hello: 'Bonjour {{first_name}}!',
@@ -33,17 +29,6 @@ final localizedLabels = <Locale, AppLocalizationsData>{
       ),
     ),
     dates: const AppLocalizationsDataDates(
-      april: 'avril',
-      march: 'février',
-      february: 'février',
-      january: 'janvier',
-      sunday: 'dimanche',
-      saturday: 'samedi',
-      friday: 'Vendredi',
-      thursday: 'jeudi',
-      wednesday: 'Mercredi',
-      tuesday: 'Mardi',
-      monday: 'LUNDI',
       month: const AppLocalizationsDataDatesMonth(
         april: 'avril',
         march: 'février',
@@ -53,7 +38,7 @@ final localizedLabels = <Locale, AppLocalizationsData>{
       weekday: const AppLocalizationsDataDatesWeekday(
         sunday: 'dimanche',
         saturday: 'samedi',
-        friday: 'Vendredi',
+        friday: 'vendredi',
         thursday: 'jeudi',
         wednesday: 'Mercredi',
         tuesday: 'Mardi',
@@ -69,10 +54,6 @@ final localizedLabels = <Locale, AppLocalizationsData>{
       manZero: 'man',
     ),
     templated: const AppLocalizationsDataTemplated(
-      pattern: 'Today : {{date:DateTime[EEE, M/d/y]}}',
-      simple: 'Today : {{date:DateTime}}',
-      formatted: 'The price is {{price:double[compactCurrency]}}',
-      count: 'There are {{count:int}}\ items.',
       contactFemale: 'Mrs {{last_name}}!',
       contactMale: 'Mr {{last_name}}!',
       hello: 'Hello {{first_name}}!',
@@ -87,17 +68,6 @@ final localizedLabels = <Locale, AppLocalizationsData>{
       ),
     ),
     dates: const AppLocalizationsDataDates(
-      april: 'april',
-      march: 'march',
-      february: 'february',
-      january: 'january',
-      sunday: 'sunday',
-      saturday: 'saturday',
-      friday: 'friday',
-      thursday: 'thursday',
-      wednesday: 'wednesday',
-      tuesday: 'tuesday',
-      monday: 'MONDAY',
       month: const AppLocalizationsDataDatesMonth(
         april: 'april',
         march: 'march',
@@ -117,17 +87,13 @@ final localizedLabels = <Locale, AppLocalizationsData>{
   ),
   Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'CN'):
       const AppLocalizationsData(
-    multiline: '这是\n\n一种\n\n多例子。',
+    multiline: '这是\n\n一种\n\n多行示例。',
     plurals: const AppLocalizationsDataPlurals(
       manMultiple: '男人',
       manOne: '男人',
       manZero: '男人',
     ),
     templated: const AppLocalizationsDataTemplated(
-      pattern: '今日 : {{date:DateTime[EEE, M/d/y]}}',
-      simple: '今日 : {{date:DateTime}}',
-      formatted: '価格は{{price:double[compactCurrency]}}です',
-      count: '{{count:int}}個のアイテムがあります',
       contactFemale: '夫人{{last_name}}',
       contactMale: '先生{{last_name}}',
       hello: '你好{{first_name}}!',
@@ -142,17 +108,6 @@ final localizedLabels = <Locale, AppLocalizationsData>{
       ),
     ),
     dates: const AppLocalizationsDataDates(
-      april: '四月',
-      march: '游行',
-      february: '二月',
-      january: '一月',
-      sunday: '星期日',
-      saturday: '星期六',
-      friday: '星期五',
-      thursday: '星期四',
-      wednesday: '星期三',
-      tuesday: '星期二',
-      monday: '星期一',
       month: const AppLocalizationsDataDatesMonth(
         april: '四月',
         march: '游行',
@@ -183,55 +138,67 @@ enum Gender {
 
 class AppLocalizationsData {
   const AppLocalizationsData({
+    required this.multiline,
     required this.plurals,
     required this.templated,
     required this.dates,
-    required this.multiline,
   });
 
+  final String multiline;
   final AppLocalizationsDataPlurals plurals;
   final AppLocalizationsDataTemplated templated;
   final AppLocalizationsDataDates dates;
-  final String multiline;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      case 'multiline':
+        return multiline;
+      default:
+        return '';
+    }
+  }
+
   factory AppLocalizationsData.fromJson(Map<String, Object?> map) =>
       AppLocalizationsData(
+        multiline: map['multiline']! as String,
         plurals: AppLocalizationsDataPlurals.fromJson(
             map['plurals']! as Map<String, Object?>),
         templated: AppLocalizationsDataTemplated.fromJson(
             map['templated']! as Map<String, Object?>),
         dates: AppLocalizationsDataDates.fromJson(
             map['dates']! as Map<String, Object?>),
-        multiline: map['multiline']! as String,
       );
 
   AppLocalizationsData copyWith({
+    String? multiline,
     AppLocalizationsDataPlurals? plurals,
     AppLocalizationsDataTemplated? templated,
     AppLocalizationsDataDates? dates,
-    String? multiline,
   }) =>
       AppLocalizationsData(
+        multiline: multiline ?? this.multiline,
         plurals: plurals ?? this.plurals,
         templated: templated ?? this.templated,
         dates: dates ?? this.dates,
-        multiline: multiline ?? this.multiline,
       );
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AppLocalizationsData &&
+          multiline == other.multiline &&
           plurals == other.plurals &&
           templated == other.templated &&
-          dates == other.dates &&
-          multiline == other.multiline);
+          dates == other.dates);
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      multiline.hashCode ^
       plurals.hashCode ^
       templated.hashCode ^
-      dates.hashCode ^
-      multiline.hashCode;
+      dates.hashCode;
 }
 
 class AppLocalizationsDataPlurals {
@@ -239,13 +206,22 @@ class AppLocalizationsDataPlurals {
     required String manMultiple,
     required String manOne,
     required String manZero,
-  })   : _manMultiple = manMultiple,
+  })  : _manMultiple = manMultiple,
         _manOne = manOne,
         _manZero = manZero;
 
   final String _manMultiple;
   final String _manOne;
   final String _manZero;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      default:
+        return '';
+    }
+  }
 
   String man({
     required Plural plural,
@@ -297,71 +273,28 @@ class AppLocalizationsDataPlurals {
 
 class AppLocalizationsDataTemplated {
   const AppLocalizationsDataTemplated({
-    required this.date,
-    required this.numbers,
-    required String pattern,
-    required String simple,
-    required String formatted,
-    required String count,
     required String contactFemale,
     required String contactMale,
     required String hello,
-  })   : _pattern = pattern,
-        _simple = simple,
-        _formatted = formatted,
-        _count = count,
-        _contactFemale = contactFemale,
+    required this.date,
+    required this.numbers,
+  })  : _contactFemale = contactFemale,
         _contactMale = contactMale,
         _hello = hello;
 
-  final AppLocalizationsDataTemplatedDate date;
-  final AppLocalizationsDataTemplatedNumbers numbers;
-  final String _pattern;
-  final String _simple;
-  final String _formatted;
-  final String _count;
   final String _contactFemale;
   final String _contactMale;
   final String _hello;
+  final AppLocalizationsDataTemplatedDate date;
+  final AppLocalizationsDataTemplatedNumbers numbers;
 
-  String pattern({
-    required DateTime date,
-    String? locale,
+  String getByKey({
+    required String key,
   }) {
-    return _pattern.insertTemplateValues(
-      {'date': date},
-      locale: locale,
-    );
-  }
-
-  String simple({
-    required DateTime date,
-    String? locale,
-  }) {
-    return _simple.insertTemplateValues(
-      {'date': date},
-      locale: locale,
-    );
-  }
-
-  String formatted({
-    required double price,
-    String? locale,
-  }) {
-    return _formatted.insertTemplateValues(
-      {'price': price},
-      locale: locale,
-    );
-  }
-
-  String count({
-    required int count,
-    String? locale,
-  }) {
-    return _count.insertTemplateValues(
-      {'count': count},
-      locale: locale,
-    );
+    switch (key) {
+      default:
+        return '';
+    }
   }
 
   String contact({
@@ -371,13 +304,17 @@ class AppLocalizationsDataTemplated {
   }) {
     if (gender == Gender.female) {
       return _contactFemale.insertTemplateValues(
-        {'last_name': lastName},
+        {
+          'last_name': lastName,
+        },
         locale: locale,
       );
     }
     if (gender == Gender.male) {
       return _contactMale.insertTemplateValues(
-        {'last_name': lastName},
+        {
+          'last_name': lastName,
+        },
         locale: locale,
       );
     }
@@ -389,92 +326,85 @@ class AppLocalizationsDataTemplated {
     String? locale,
   }) {
     return _hello.insertTemplateValues(
-      {'first_name': firstName},
+      {
+        'first_name': firstName,
+      },
       locale: locale,
     );
   }
 
   factory AppLocalizationsDataTemplated.fromJson(Map<String, Object?> map) =>
       AppLocalizationsDataTemplated(
+        contactFemale: map['contactFemale']! as String,
+        contactMale: map['contactMale']! as String,
+        hello: map['hello']! as String,
         date: AppLocalizationsDataTemplatedDate.fromJson(
             map['date']! as Map<String, Object?>),
         numbers: AppLocalizationsDataTemplatedNumbers.fromJson(
             map['numbers']! as Map<String, Object?>),
-        pattern: map['pattern']! as String,
-        simple: map['simple']! as String,
-        formatted: map['formatted']! as String,
-        count: map['count']! as String,
-        contactFemale: map['contactFemale']! as String,
-        contactMale: map['contactMale']! as String,
-        hello: map['hello']! as String,
       );
 
   AppLocalizationsDataTemplated copyWith({
-    AppLocalizationsDataTemplatedDate? date,
-    AppLocalizationsDataTemplatedNumbers? numbers,
-    String? pattern,
-    String? simple,
-    String? formatted,
-    String? count,
     String? contactFemale,
     String? contactMale,
     String? hello,
+    AppLocalizationsDataTemplatedDate? date,
+    AppLocalizationsDataTemplatedNumbers? numbers,
   }) =>
       AppLocalizationsDataTemplated(
-        date: date ?? this.date,
-        numbers: numbers ?? this.numbers,
-        pattern: pattern ?? _pattern,
-        simple: simple ?? _simple,
-        formatted: formatted ?? _formatted,
-        count: count ?? _count,
         contactFemale: contactFemale ?? _contactFemale,
         contactMale: contactMale ?? _contactMale,
         hello: hello ?? _hello,
+        date: date ?? this.date,
+        numbers: numbers ?? this.numbers,
       );
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AppLocalizationsDataTemplated &&
-          date == other.date &&
-          numbers == other.numbers &&
-          _pattern == other._pattern &&
-          _simple == other._simple &&
-          _formatted == other._formatted &&
-          _count == other._count &&
           _contactFemale == other._contactFemale &&
           _contactMale == other._contactMale &&
-          _hello == other._hello);
+          _hello == other._hello &&
+          date == other.date &&
+          numbers == other.numbers);
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      date.hashCode ^
-      numbers.hashCode ^
-      _pattern.hashCode ^
-      _simple.hashCode ^
-      _formatted.hashCode ^
-      _count.hashCode ^
       _contactFemale.hashCode ^
       _contactMale.hashCode ^
-      _hello.hashCode;
+      _hello.hashCode ^
+      date.hashCode ^
+      numbers.hashCode;
 }
 
 class AppLocalizationsDataTemplatedDate {
   const AppLocalizationsDataTemplatedDate({
     required String pattern,
     required String simple,
-  })   : _pattern = pattern,
+  })  : _pattern = pattern,
         _simple = simple;
 
   final String _pattern;
   final String _simple;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      default:
+        return '';
+    }
+  }
 
   String pattern({
     required DateTime date,
     String? locale,
   }) {
     return _pattern.insertTemplateValues(
-      {'date': date},
+      {
+        'date': date,
+      },
       locale: locale,
     );
   }
@@ -484,7 +414,9 @@ class AppLocalizationsDataTemplatedDate {
     String? locale,
   }) {
     return _simple.insertTemplateValues(
-      {'date': date},
+      {
+        'date': date,
+      },
       locale: locale,
     );
   }
@@ -521,7 +453,7 @@ class AppLocalizationsDataTemplatedNumbers {
     required String formatted,
     required String simple,
     required String count,
-  })   : _formatted = formatted,
+  })  : _formatted = formatted,
         _simple = simple,
         _count = count;
 
@@ -529,12 +461,23 @@ class AppLocalizationsDataTemplatedNumbers {
   final String _simple;
   final String _count;
 
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      default:
+        return '';
+    }
+  }
+
   String formatted({
     required double price,
     String? locale,
   }) {
     return _formatted.insertTemplateValues(
-      {'price': price},
+      {
+        'price': price,
+      },
       locale: locale,
     );
   }
@@ -544,7 +487,9 @@ class AppLocalizationsDataTemplatedNumbers {
     String? locale,
   }) {
     return _simple.insertTemplateValues(
-      {'price': price},
+      {
+        'price': price,
+      },
       locale: locale,
     );
   }
@@ -554,7 +499,9 @@ class AppLocalizationsDataTemplatedNumbers {
     String? locale,
   }) {
     return _count.insertTemplateValues(
-      {'count': count},
+      {
+        'count': count,
+      },
       locale: locale,
     );
   }
@@ -597,80 +544,35 @@ class AppLocalizationsDataDates {
   const AppLocalizationsDataDates({
     required this.month,
     required this.weekday,
-    required this.april,
-    required this.march,
-    required this.february,
-    required this.january,
-    required this.sunday,
-    required this.saturday,
-    required this.friday,
-    required this.thursday,
-    required this.wednesday,
-    required this.tuesday,
-    required this.monday,
   });
 
   final AppLocalizationsDataDatesMonth month;
   final AppLocalizationsDataDatesWeekday weekday;
-  final String april;
-  final String march;
-  final String february;
-  final String january;
-  final String sunday;
-  final String saturday;
-  final String friday;
-  final String thursday;
-  final String wednesday;
-  final String tuesday;
-  final String monday;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      default:
+        return '';
+    }
+  }
+
   factory AppLocalizationsDataDates.fromJson(Map<String, Object?> map) =>
       AppLocalizationsDataDates(
         month: AppLocalizationsDataDatesMonth.fromJson(
             map['month']! as Map<String, Object?>),
         weekday: AppLocalizationsDataDatesWeekday.fromJson(
             map['weekday']! as Map<String, Object?>),
-        april: map['april']! as String,
-        march: map['march']! as String,
-        february: map['february']! as String,
-        january: map['january']! as String,
-        sunday: map['sunday']! as String,
-        saturday: map['saturday']! as String,
-        friday: map['friday']! as String,
-        thursday: map['thursday']! as String,
-        wednesday: map['wednesday']! as String,
-        tuesday: map['tuesday']! as String,
-        monday: map['monday']! as String,
       );
 
   AppLocalizationsDataDates copyWith({
     AppLocalizationsDataDatesMonth? month,
     AppLocalizationsDataDatesWeekday? weekday,
-    String? april,
-    String? march,
-    String? february,
-    String? january,
-    String? sunday,
-    String? saturday,
-    String? friday,
-    String? thursday,
-    String? wednesday,
-    String? tuesday,
-    String? monday,
   }) =>
       AppLocalizationsDataDates(
         month: month ?? this.month,
         weekday: weekday ?? this.weekday,
-        april: april ?? this.april,
-        march: march ?? this.march,
-        february: february ?? this.february,
-        january: january ?? this.january,
-        sunday: sunday ?? this.sunday,
-        saturday: saturday ?? this.saturday,
-        friday: friday ?? this.friday,
-        thursday: thursday ?? this.thursday,
-        wednesday: wednesday ?? this.wednesday,
-        tuesday: tuesday ?? this.tuesday,
-        monday: monday ?? this.monday,
       );
 
   @override
@@ -678,34 +580,9 @@ class AppLocalizationsDataDates {
       identical(this, other) ||
       (other is AppLocalizationsDataDates &&
           month == other.month &&
-          weekday == other.weekday &&
-          april == other.april &&
-          march == other.march &&
-          february == other.february &&
-          january == other.january &&
-          sunday == other.sunday &&
-          saturday == other.saturday &&
-          friday == other.friday &&
-          thursday == other.thursday &&
-          wednesday == other.wednesday &&
-          tuesday == other.tuesday &&
-          monday == other.monday);
+          weekday == other.weekday);
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      month.hashCode ^
-      weekday.hashCode ^
-      april.hashCode ^
-      march.hashCode ^
-      february.hashCode ^
-      january.hashCode ^
-      sunday.hashCode ^
-      saturday.hashCode ^
-      friday.hashCode ^
-      thursday.hashCode ^
-      wednesday.hashCode ^
-      tuesday.hashCode ^
-      monday.hashCode;
+  int get hashCode => runtimeType.hashCode ^ month.hashCode ^ weekday.hashCode;
 }
 
 class AppLocalizationsDataDatesMonth {
@@ -720,6 +597,24 @@ class AppLocalizationsDataDatesMonth {
   final String march;
   final String february;
   final String january;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      case 'april':
+        return april;
+      case 'march':
+        return march;
+      case 'february':
+        return february;
+      case 'january':
+        return january;
+      default:
+        return '';
+    }
+  }
+
   factory AppLocalizationsDataDatesMonth.fromJson(Map<String, Object?> map) =>
       AppLocalizationsDataDatesMonth(
         april: map['april']! as String,
@@ -776,6 +671,30 @@ class AppLocalizationsDataDatesWeekday {
   final String wednesday;
   final String tuesday;
   final String monday;
+
+  String getByKey({
+    required String key,
+  }) {
+    switch (key) {
+      case 'sunday':
+        return sunday;
+      case 'saturday':
+        return saturday;
+      case 'friday':
+        return friday;
+      case 'thursday':
+        return thursday;
+      case 'wednesday':
+        return wednesday;
+      case 'tuesday':
+        return tuesday;
+      case 'monday':
+        return monday;
+      default:
+        return '';
+    }
+  }
+
   factory AppLocalizationsDataDatesWeekday.fromJson(Map<String, Object?> map) =>
       AppLocalizationsDataDatesWeekday(
         sunday: map['sunday']! as String,

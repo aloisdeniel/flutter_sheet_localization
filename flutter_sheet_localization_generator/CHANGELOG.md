@@ -1,3 +1,7 @@
+## 5.2.0
+
+- Added dynamic keys support
+
 ## 5.1.7
 
 - Upgraded dependencies
