@@ -1,3 +1,7 @@
+## 0.16.0
+
+- Added dynamic keys support.
+
 ## 0.15.7
 
 - Upgraded recase dependency.

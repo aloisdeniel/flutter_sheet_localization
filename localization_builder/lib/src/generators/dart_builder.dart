@@ -1,6 +1,7 @@
 import 'package:dart_style/dart_style.dart';
 import 'package:localization_builder/src/definitions/category.dart';
 import 'package:localization_builder/src/definitions/condition.dart';
+import 'package:localization_builder/src/definitions/label.dart';
 import 'package:localization_builder/src/definitions/localizations.dart';
 import 'package:localization_builder/src/definitions/section.dart';
 import 'package:localization_builder/src/definitions/translation.dart';
@@ -132,6 +133,28 @@ import 'package:template_string/template_string.dart';
     _buffer.writeln('enum ${category.normalizedName} { $values }');
   }
 
+  String _getByKeyBody(List<Label> labels) {
+    final results = StringBuffer('{\n');
+    results.write('switch (key) {');
+    for (var label in labels) {
+      if (label.templatedValues.isEmpty &&
+          label.cases.length == 1 &&
+          label.cases.first.condition is DefaultCondition) {
+        results.write("case '");
+        results.write(label.normalizedKey);
+        results.write("'");
+        results.write(':');
+        results.write('return ');
+        results.write(label.normalizedKey);
+        results.write(';\n');
+      }
+    }
+    results.write("default: return '';");
+    results.write('}');
+    results.write('}');
+    return results.toString();
+  }
+
   void _addSectionDefinition(List<String> path, Section section) {
     path = [
       ...path,
@@ -141,6 +164,18 @@ import 'package:template_string/template_string.dart';
     final result = DataClassBuilder(
       _buildClassNameFromPath(path),
       isConst: true,
+    );
+
+    result.addMethod(
+      returnType: 'String',
+      name: 'getByKey',
+      body: _getByKeyBody(section.labels),
+      arguments: <ArgumentBuilder>[
+        ArgumentBuilder(
+          name: 'key',
+          type: 'String',
+        ),
+      ],
     );
 
     for (var label in section.labels) {
