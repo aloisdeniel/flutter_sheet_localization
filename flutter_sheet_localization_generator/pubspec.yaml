@@ -4,22 +4,22 @@ version: 5.1.7
 homepage: https://github.com/aloisdeniel/flutter_sheet_localization
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
   flutter: ">=2.0.0"
 
 dependencies:
   flutter:
-    sdk: flutter 
+    sdk: flutter
   http: ^0.13.1
   meta: ^1.3.0
   csv: ^5.0.0
   recase: ^4.0.0
   code_builder: ^4.0.0
-  dart_style: ^2.0.0 
+  dart_style: ^2.0.0
   source_gen: ^1.0.0
   flutter_sheet_localization: ^5.1.1
   build: ^2.0.0
-  analyzer: ^1.4.0
+  analyzer: ^2.7.0
   collection: ^1.15.0
   intl: ^0.17.0
   localization_builder: ^0.15.7
