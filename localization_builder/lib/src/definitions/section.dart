@@ -3,8 +3,6 @@ import 'package:localization_builder/localization_builder.dart';
 import 'package:logging/logging.dart';
 import 'package:recase/recase.dart' as recase;
 
-import 'category.dart';
-import 'label.dart';
 import 'translation.dart';
 
 /// A section is a set of labels, grouped together to to make them

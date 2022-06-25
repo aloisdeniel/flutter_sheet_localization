@@ -1,8 +1,5 @@
 import 'package:localization_builder/localization_builder.dart';
 
-import 'label.dart';
-import 'section.dart';
-
 class Localizations extends Section {
   Localizations({
     required this.name,
