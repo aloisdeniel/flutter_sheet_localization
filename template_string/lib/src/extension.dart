@@ -1,4 +1,3 @@
-import 'package:intl/locale.dart';
 import 'package:template_string/src/template.dart';
 
 import 'formatters.dart';

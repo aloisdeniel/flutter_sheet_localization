@@ -1,4 +1,3 @@
-import 'package:localization_builder/src/definitions/label.dart';
 import 'package:localization_builder/src/definitions/localizations.dart';
 import 'package:localization_builder/src/definitions/section.dart';
 import 'package:localization_builder/src/definitions/translation.dart';
