@@ -19,7 +19,7 @@ dependencies:
   source_gen: ^1.0.0
   flutter_sheet_localization: ^5.1.1
   build: ^2.0.0
-  analyzer: ^1.4.0
+  analyzer: ^4.1.0
   collection: ^1.15.0
   intl: ^0.17.0
   localization_builder: ^0.15.7
