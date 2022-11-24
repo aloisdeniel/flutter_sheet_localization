@@ -1,3 +1,7 @@
+## 5.1.8
+
+- Upgraded dependencies
+
 ## 5.1.7
 
 - Upgraded dependencies
@@ -40,7 +44,7 @@
 ## 2.1.0
 
 - Added ignored columns when named `(<name>)`.
-- Strings are now generated with `'` instead of `"`. 
+- Strings are now generated with `'` instead of `"`.
 
 ## 2.0.2
 
